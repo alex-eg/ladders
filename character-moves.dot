@@ -1,0 +1,14 @@
+digraph moves {
+    Stand[label="Стоит"]
+    Run[label="Бежит"]
+    Jump[label="Прыгает (летит вверх)"]
+    Fly[label="Падает (летит вниз)"]
+    Climb[label="Двигается по лестнице"]
+    
+    Stand -> {Run Jump Climb}
+    Run -> {Stand Jump Fly}
+    Jump -> {Climb Fly}
+    Fly -> {Stand Run Climb}
+    Climb -> {Stand Jump Fly}
+}
+    
