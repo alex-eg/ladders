@@ -1,19 +1,102 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[12pt,a4paper,fullpage]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{fullpage}
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{float}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
+
+\usepackage{tikz} %for images and graphics
+\usetikzlibrary{positioning,shadows,arrows}
+
 
 \begin{document}
 
 \tableofcontents
 \newpage
 
-\section{Структуры}
-Можно выделить следующие области:
+\section{Модули}
+Можно выделить следующие логические части программы (делее --- модули), отвечающие за:
+\begin{itemize}
+	\item Звук.
+	\item Графика.
+	\item Логика.
+	\item Интерфейс пользователя.
+	\item Статистика.
+	\item Ошибки.
+	\item .\\
+\end{itemize}
 
-\newpage
-\section{Диаграмма}
+\subsection{Функции модулей}
+\subsubsection{Звук}
+\begin{itemize}
+	\item Проигрывание определенных звуков по вызовам из других модулей.
+	\item Переключение звуковых схем.
+	\item .\\
+\end{itemize}
+
+\subsubsection{Графика}
+\begin{itemize}
+	\item Отображение соответствующих графических схем.
+	\item .\\
+\end{itemize}
+
+\subsubsection{Логика}
+\begin{itemize}
+	\item Текущие вычисления (урон и прочее).
+	\item Генераторы.
+	\item .\\
+\end{itemize}
+
+\subsubsection{Интерфейс пользователя}
+\begin{itemize}
+	\item Хранение пользовательских настроек.
+	\item Передача соответствующих сигналов в другие блоки.
+	\item .\\
+\end{itemize}
+
+\subsubsection{Статистика}
+\begin{itemize}
+	\item Хранение и обработка текущих данных (таблицы очков и прочее).
+	\item .\\
+\end{itemize}
+
+\subsubsection{Ошибки}
+\begin{itemize}
+	\item .\\
+\end{itemize}
+
+
+\subsection{Взаимодействие модулей}
+Взаимодействие модулей может быть проиллюстрировано следующим образом:\\
+
+\begin{figure}[thbp!]
+  \centering
+  \tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered, anchor=north]
+  \tikzstyle{line} = [draw, -latex']
+  \begin{tikzpicture}[node distance=1cm, auto]
+    \node[abstract, text width = 4cm](Sound) {Звук};
+    \node[abstract, text width = 4cm, right = of Sound](Logic) {Логика};
+    \node[abstract, text width = 4cm, below  = of Sound](Graph) {Графика};
+    \node[abstract, text width = 4cm, right = of Graph](Stat) {Статистика};
+    \node[abstract, text width = 4cm, below  = of Graph](UI) {Интерфейс пользователя};
+    \node[abstract, text width = 4cm, right = of UI](Mistakes) {Ошибки};
+    
+    \path [line] (Logic.south) to (Stat.north);
+    \path [line] (Logic.west) to (Sound.east);
+    \path [line] (Logic.south) to (Graph.east);
+    
+    \path [line] (Graph.north) to (Logic.west);
+    
+    \path [line] (Stat.west) to (Graph.east);
+    
+	\path [line] (UI.west) to [out=180,in=180] (Sound.west);
+	\path [line] (UI.west) to [out=180,in=180] (Graph.west);
+    
+  \end{tikzpicture}
+  \vspace{0.5cm}
+  \caption{Схема взаимодействия модулей}
+\end{figure}
+
 
 \end{document}
