@@ -1,11 +1,14 @@
 \documentclass[12pt,a4paper]{article}
-\usepackage{hyperref}
-\usepackage{graphicx}
-\usepackage{float}
 \usepackage[utf8]{inputenc}
 \usepackage[russian]{babel}
+\usepackage{hyperref}
+\usepackage{graphicx}
 \usepackage{placeins}
 \usepackage{tabulary}
+\usepackage{float}
+
+\usepackage{tikz} %for images and graphics
+\usetikzlibrary{positioning,shapes,arrows}
 
 \begin{document}
 
@@ -124,7 +127,53 @@
 
 \subsubsection{Граф переходов состояний}
 Переходы из состояния в состояние возможны по следующей схеме:\\
-\pics{1.0}{character-moves.png}{Передвижение персонажа}
+%\pics{1.0}{character-moves.png}{Передвижение персонажа}
+
+\begin{figure}[thbp!]
+	\centering
+	\begin{tikzpicture}[->, >=stealth', shorten >=2pt, auto, node distance=1cm, auto, thick,
+	main node/.style={
+		ellipse, 
+		draw=black, very thick,
+		minimum width=100pt,
+		text centered}]
+
+		%nodes
+		\node[main node] (a) {Стоит};		
+		\node[main node] (b) [below = of a]  {Бежит};		
+		\node[main node] (c) [below = of b] {Падает (летит вниз)};		
+		\node[main node] (d) [below = of c] {Двигается по лестнице};		
+		\node[main node] (e) [below = of d] {Прыгает (летит вверх)};
+		
+		%pathes
+		\path 
+			(a) edge [bend left = 5] node {} (b)
+				edge [bend left = 90] node {} (d)
+				edge [bend right = 90] node {} (e);
+		\path 
+			(b) edge [bend left = 5] node {} (a)
+				edge [bend left = 5] node {} (c)
+				edge [bend right = 87] node {} (e);
+		\path 
+			(c) edge [bend left = 5] node {} (b)
+				edge [bend left = 5] node {} (d)
+				edge [bend right = 75] node {} (a);
+		\path 
+			(d) edge [bend left = 5] node {} (c)
+				edge [bend left = 5] node {} (e)
+				edge [bend right = 85] node {} (a);
+		\path 
+			(e) edge [bend left = 5] node {} (d)
+				edge [bend left = 85] node {} (c);
+	
+	\end{tikzpicture}
+	\vspace{0.5cm}
+	\caption{Передвижение персонажа}
+\end{figure}
+
+
+
+
 
 \subsubsection{Бездействие}
 Персонаж просто стоит. Может начать бежать, взбираться по лестнице, или прыгнуть.\\
