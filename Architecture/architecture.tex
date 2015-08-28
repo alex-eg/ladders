@@ -1,0 +1,104 @@
+\documentclass[12pt,a4paper,fullpage]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{float}
+
+\usepackage{tikz} %for images and graphics
+\usetikzlibrary{positioning, arrows}
+
+\begin{document}
+
+\tableofcontents
+\newpage
+
+\section{Модули}
+Можно выделить следующие логические части программы (делее --- модули), отвечающие за:
+\begin{itemize}
+	\item Звук.
+	\item Графика.
+	\item Логика.
+	\item Интерфейс пользователя.
+	\item Статистика.
+	\item Ошибки.
+	\item .\\
+\end{itemize}
+
+\subsection{Функции модулей}
+\subsubsection{Звук}
+\begin{itemize}
+	\item Проигрывание определенных звуков по вызовам из других модулей.
+	\item Переключение звуковых схем.
+	\item .\\
+\end{itemize}
+
+\subsubsection{Графика}
+\begin{itemize}
+	\item Отображение соответствующих графических схем.
+	\item .\\
+\end{itemize}
+
+\subsubsection{Логика}
+\begin{itemize}
+	\item Текущие вычисления (урон и прочее).
+	\item Генераторы.
+	\item .\\
+\end{itemize}
+
+\subsubsection{Интерфейс пользователя}
+\begin{itemize}
+	\item Хранение пользовательских настроек.
+	\item Передача соответствующих сигналов в другие блоки.
+	\item .\\
+\end{itemize}
+
+\subsubsection{Статистика}
+\begin{itemize}
+	\item Хранение и обработка текущих данных (таблицы очков и прочее).
+	\item .\\
+\end{itemize}
+
+\subsubsection{Ошибки}
+\begin{itemize}
+	\item .\\
+\end{itemize}
+
+
+\subsection{Взаимодействие модулей}
+Взаимодействие модулей может быть проиллюстрировано следующим образом:\\
+
+\begin{figure}[thbp!]
+  \centering
+  \tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered]
+  \begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
+  
+  %nodes
+    \node[abstract, text width = 4cm](Sound) {Звук};
+    \node[abstract, text width = 4cm, right = of Sound](Logic) {Логика};
+    \node[abstract, text width = 4cm, below  = of Sound](Graph) {Графика};
+    \node[abstract, text width = 4cm, right = of Graph](Stat) {Статистика};
+    \node[abstract, text width = 4cm, below  = of Graph](UI) {Интерфейс пользователя};
+    \node[abstract, text width = 4cm, right = of UI](Mistakes) {Ошибки};
+    
+  %edges    
+	\path 
+		(Logic) edge (Stat)
+				edge (Sound)
+				edge [bend left = 5] (Graph);
+	\path 
+		(Graph) edge [bend left = 5] (Logic);
+	\path 
+		(Stat) edge (Graph);
+	\path 
+		(UI) edge [bend left = 90] (Sound)
+			 edge [bend left = 90] (Graph);
+    
+  \end{tikzpicture}
+  \caption{Схема взаимодействия модулей}
+\end{figure}
+
+
+\end{document}
