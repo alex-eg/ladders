@@ -1,6 +1,12 @@
-*~
-*.aux
+#TeX 
+*.toc
 *.log
-*.pdf
-*.
+*.aux
 *.synctex.gz
+*.out
+*.bbl
+*.blg
+*.pdf
+
+#Temporary
+*~

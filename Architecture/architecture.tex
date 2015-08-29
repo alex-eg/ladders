@@ -4,11 +4,11 @@
 \usepackage{fullpage}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{placeins}
 \usepackage{float}
 
 \usepackage{tikz} %for images and graphics
-\usetikzlibrary{positioning,shadows,arrows}
-
+\usetikzlibrary{positioning, arrows}
 
 \begin{document}
 
@@ -72,9 +72,10 @@
 
 \begin{figure}[thbp!]
   \centering
-  \tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered, anchor=north]
-  \tikzstyle{line} = [draw, -latex']
-  \begin{tikzpicture}[node distance=1cm, auto]
+  \tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered]
+  \begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
+  
+  %nodes
     \node[abstract, text width = 4cm](Sound) {Звук};
     \node[abstract, text width = 4cm, right = of Sound](Logic) {Логика};
     \node[abstract, text width = 4cm, below  = of Sound](Graph) {Графика};
@@ -82,19 +83,20 @@
     \node[abstract, text width = 4cm, below  = of Graph](UI) {Интерфейс пользователя};
     \node[abstract, text width = 4cm, right = of UI](Mistakes) {Ошибки};
     
-    \path [line] (Logic.south) to (Stat.north);
-    \path [line] (Logic.west) to (Sound.east);
-    \path [line] (Logic.south) to (Graph.east);
-    
-    \path [line] (Graph.north) to (Logic.west);
-    
-    \path [line] (Stat.west) to (Graph.east);
-    
-	\path [line] (UI.west) to [out=180,in=180] (Sound.west);
-	\path [line] (UI.west) to [out=180,in=180] (Graph.west);
+  %edges    
+	\path 
+		(Logic) edge (Stat)
+				edge (Sound)
+				edge [bend left = 5] (Graph);
+	\path 
+		(Graph) edge [bend left = 5] (Logic);
+	\path 
+		(Stat) edge (Graph);
+	\path 
+		(UI) edge [bend left = 90] (Sound)
+			 edge [bend left = 90] (Graph);
     
   \end{tikzpicture}
-  \vspace{0.5cm}
   \caption{Схема взаимодействия модулей}
 \end{figure}
 
