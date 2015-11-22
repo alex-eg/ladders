@@ -1,0 +1,40 @@
+\documentclass[12pt,a0paper,fullpage]{article}
+\usepackage[a0paper]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{fullpage}
+\usepackage{graphicx}
+
+\usepackage{tikz} %for images and graphics
+\usetikzlibrary{shapes, positioning, arrows}
+
+%definig tikz primitives
+\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered]
+
+\begin{document}
+	\centering
+	\begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
+  	%nodes
+	    \node[abstract, text width = 4cm](Sound) {Звук};
+	    \node[abstract, text width = 4cm, right = of Sound](Logic) {Логика};
+	    \node[abstract, text width = 4cm, below  = of Sound](Graph) {Графика};
+	    \node[abstract, text width = 4cm, right = of Graph](Stat) {Статистика};
+	    \node[abstract, text width = 4cm, below  = of Graph](UI) {Интерфейс пользователя};
+	    \node[abstract, text width = 4cm, right = of UI](Mistakes) {Ошибки};
+    
+	%edges    
+		\path 
+			(Logic) edge (Stat)
+					edge (Sound)
+					edge [bend left = 5] (Graph);
+		\path 
+			(Graph) edge [bend left = 5] (Logic);
+		\path 
+			(Stat) edge (Graph);
+		\path 
+			(UI) edge [bend left = 90] (Sound)
+				 edge [bend left = 90] (Graph);
+    
+  \end{tikzpicture}
+
+\end{document}

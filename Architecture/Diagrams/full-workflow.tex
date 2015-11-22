@@ -1,0 +1,47 @@
+\documentclass[12pt,a0paper,fullpage]{article}
+\usepackage[a0paper]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{fullpage}
+\usepackage{graphicx}
+
+\usepackage{tikz} %for images and graphics
+\usetikzlibrary{shapes, positioning, arrows}
+
+%definig tikz primitives
+\tikzstyle{startstop} = [ellipse, minimum width=3cm, minimum height=1cm,text centered, text width = 3.5cm, draw=black]
+
+\tikzstyle{io} = [trapezium, trapezium left angle=60, trapezium right angle=120, minimum width=3cm, minimum height=1cm, text centered, text width = 3.5cm, draw=black]
+
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width = 6cm, draw=black]
+
+\tikzstyle{decision} = [diamond, aspect=4, text centered, draw=black]
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+
+\begin{document}
+	\begin{tikzpicture}[node distance = 2cm]
+		% Nodes
+		\node[startstop](launch) {Старт};
+		\node[process, below of = launch](sys-chk) {Проверка наличия системных компонентов};
+		\node[decision, below of = sys-chk, yshift=-0.5cm](sys-chk-cond) {Проверка пройдена успешно?};
+		\node[process, right of = sys-chk-cond, xshift = 7cm](sys-rep) {Механизм исправления ошибок};
+		\node[process, below of = sys-chk-cond, yshift=-0.5cm](usr-chk) {Проверка наличия пользовательских компонентов};
+		\node[decision, below of = usr-chk, yshift=-0.5cm](usr-chk-cond) {Проверка пройдена успешно?};
+		\node[process, right of = usr-chk-cond, xshift = 7cm](usr-rep) {Механизм исправления ошибок};
+		\node[process, below of = usr-chk-cond, yshift=-0.5cm](game) {Запуск игры};
+		
+		% Edges
+		\draw [arrow] (launch) -- (sys-chk);
+		\draw [arrow] (sys-chk) -- (sys-chk-cond);
+		\draw [arrow] (sys-chk-cond) -- node[anchor=south] {нет} (sys-rep);
+		\draw [arrow] (sys-chk-cond) -- node[anchor=west] {да} (usr-chk);
+		\draw [arrow] (sys-rep) |- (sys-chk);
+		\draw [arrow] (usr-chk) -- (usr-chk-cond);
+		\draw [arrow] (usr-chk-cond) -- node[anchor=south] {нет} (usr-rep);
+		\draw [arrow] (usr-chk-cond) -- node[anchor=west] {да} (game);		
+		\draw [arrow] (usr-rep) |- (usr-chk);
+		
+	\end{tikzpicture}
+\end{document}
