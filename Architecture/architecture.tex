@@ -5,17 +5,358 @@
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{placeins}
+\usepackage{tabulary}
 \usepackage{float}
 
 \usepackage{tikz} %for images and graphics
-\usetikzlibrary{positioning, arrows}
+\usetikzlibrary{shapes, positioning, arrows}
 
+%defining img insert func
+\newcommand{\pics}[3]{
+	\begin{figure}[htbp!]
+		\noindent 
+		\includegraphics[scale=#1]{./Pics/#2}
+		\caption{#3}
+	\end{figure}
+	\FloatBarrier}
+
+%definig new tikz primitives
+\tikzstyle{startstop} = [ellipse, minimum width=3cm, minimum height=1cm,text centered, text width = 3.5cm, draw=black]
+
+\tikzstyle{io} = [trapezium, trapezium left angle=60, trapezium right angle=120, minimum width=3cm, minimum height=1cm, text centered, text width = 3.5cm, draw=black]
+
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width = 6cm, draw=black]
+
+\tikzstyle{decision} = [diamond, aspect=4, text centered, draw=black]
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \begin{document}
 
-\tableofcontents
-\newpage
+\begin{titlepage}
+	
+	\begin{center}
+		\Huge{Лестницы}
+	\end{center}
 
-\section{Модули}
+	\vspace{40pt}
+	
+	\begin{center}
+		\LARGE{Архитектура приложения}
+	\end{center}
+	
+\end{titlepage}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\tableofcontents
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
+\section{Выдержки из технического задания}
+
+\paragraph{Геймплей:} нединамичный платформер.
+
+\paragraph{Цель игры:} выбраться наружу, набрав как можно больше очков. 
+
+\paragraph{Очки} начисляются за:
+\begin{itemize}
+	\item собранные монетки;
+	\item дополнительные жизни;
+	\item оставшееся после прохождения уровня время (1 секунда = 1 очко).
+\end{itemize}
+
+\paragraph{Уровень:}
+\begin{itemize}
+	\item три типа (отличаются только оформлением):
+	\begin{itemize}
+		\item пещера;
+		\item подземелье;
+		\item поверхность.
+	\end{itemize}
+	\item содержит от 6 до 36 комнат;
+	\item при переходе на следующий:
+	\begin{itemize}
+		\item происходит по нажатию клавиши (после вывода соответствующего приглашения по обнулении таймера);
+		\item собранные жизни сохраняются.
+	\end{itemize}
+\end{itemize}
+
+\paragraph{Комната:}
+\begin{itemize}
+	\item занимает окно игры целиком;
+	\item соединяется с другими посредством переходов (из любой комнаты есть путь в любую другую);
+	\item содержит от 1 до 3 этажей;
+	\item этажи соединяются лестницами;
+	\item дополнительные элементы:
+	\begin{itemize}
+		\item перегородки;
+		\item двери.
+	\end{itemize}
+	\item переход из комнаты возможнен с помощью:
+	\begin{itemize}
+		\item двери в стене комнаты (левая/правая);
+		\item прохода сквозь пол/потолок.
+	\end{itemize}
+\end{itemize}
+
+\paragraph{Персонаж:}
+\begin{itemize}
+	\item жизни:
+	\begin{itemize}
+		\item две в начале уровня;
+		\item дополнительные могут быть собраны по мере прохождения игры;
+		\item после утраты на 3 секунды включается неуязвимость, позволяющая уйти с шипов. Игра завершается, если дополнительных жизней не осталось.
+	\end{itemize}
+	\item гибель наступает в результате:
+	\begin{itemize}
+		\item падения с большой высоты (более 2/3 общей высоты комнаты);
+		\item соприкосновения с шипами.
+	\end{itemize}
+	\item передвижение:
+	\begin{itemize}
+		\item неподвижность;
+		\item бег;
+		\item прыжок:
+		\begin{itemize}
+			\item высота --- не более вертикального сегмента;
+			\item длина --- не более горзионтального сегмента.
+		\end{itemize}
+		\item падение:
+		\begin{itemize}
+			\item происходит, если персонаж добегает до конца платформы и не останавливается.
+		\end{itemize}
+		\item подъем по лестнице.
+		\item сбор предметов происходит автоматически;
+		\item двери заблаговременно открываются при приближении.
+	\end{itemize}
+\end{itemize}
+
+\paragraph{Карта:} 
+\begin{itemize}
+	\item находится в правом верхнем углу (в свёрнутом состоянии);
+	\item показывает посещенные, текущую и стартовую комнаты;
+	\item размер --- шесть комнат по вертикали и шесть по горизонтали;
+	\item переходы показываются, если существуют.
+\end{itemize}
+
+\paragraph{Завершение игры} происхоит в случае:
+\begin{itemize}
+	\item утраты всех жизней;
+	\item по прохождении последнего уровня.
+\end{itemize}
+
+\paragraph{Запись лучшего результата} происходит, если:
+\begin{itemize}
+	\item в таблице рекордов есть пустые места;
+	\item текущее значение лучше, чем одно из занесенных в таблицу.
+\end{itemize}
+
+\paragraph{Управление} осуществляется с клавиатуры или геймпада.\\
+Команды и дефолтные биндинги:\\
+
+\begin{tabulary}{\linewidth}{|C|C|C|}
+	\hline
+	Команда & Клавиатура & Геймпад\\
+	\hline
+	Бег влево & A & Крестовина Влево \\
+	\hline
+	Бег вправо & D & Крестовина Вправо \\
+	\hline
+	Прыжок & Space & A \\
+	\hline
+	Меню & Escape & Start \\
+	\hline
+	Забраться на лестинцу & W & Крестовина Вверх \\
+	\hline
+	Открыть дверь & E & X \\
+	\hline
+	Упасть с лестницы & S & Крестовина Вниз \\
+	\hline
+	Показать карту & M & Y \\
+	\hline
+	Прокрутить камеру & стрелки & правый джойстик \\
+	\hline
+\end{tabulary}
+\vspace{10pt}
+
+Нажатие <<Esc>> во время игры --- постановка игры на паузу и вызов меню с предложениям продолжить или завершить текущую сессию.\\
+
+\paragraph{Интерфейс:}
+\begin{itemize}
+	\item символы ``>'' и ``<'' вокруг пункта главного меню означают, что он сейчас выбран, и по нажатии на <<Enter>> (или А) будет выполнено соответствующее действие:
+	\begin{itemize}
+		\item продолжить --- присутствует, если в прошлом запуске была незаконченная сессия. Иначе отсутствует
+		\item старт --- начало игры
+		\item рекорды --- таблица рекордов с очками и именами победителей
+		\item упрaвление --- меню настроек управления
+		\item выход -- выход из приложения\\
+	\end{itemize}
+	\item игра:	
+	\begin{itemize}
+		\item основное окно --- текущий уровень;
+		\item левый верхний угол --- таймер и счётчик жизней. 
+		\item правый верхний угол --- количество очков и полупрозрачный оверлей с мини-картой.
+	\end{itemize}
+\end{itemize}
+
+\paragraph{Графика:}
+\begin{itemize}
+	\item OpenGL;
+	\item плоская;
+	\item пиксельная;
+	\item спрайтовая;
+	\item анимация предусмотрена для:
+	\begin{itemize}
+		\item дверей (открытие);
+		\item монеток (вращение);
+		\item жизней (вращение);
+		\item персонажа (движение).
+	\end{itemize}
+	\item Размер комнаты фиксирован (1440х900 пикселей);
+	\item Размер окна:
+	\begin{itemize}
+		\item можно менять произвольным образом;
+		\item минимальный --- 480х300.
+	\end{itemize}
+\end{itemize}
+
+\paragraph{Физика} обычная платформерная:
+\begin{itemize}
+	\item сквозь закрытые двери и стены ходить нельзя;
+	\item сквозь перекрытия проваливаться и пропрыгивать нельзя;
+	\item управлять персонажем в воздухе (влево-вправо) возможно.
+\end{itemize}
+
+\paragraph{Настройки:}
+\begin{itemize}
+	\item хранятся в файле.
+\end{itemize}
+
+\paragraph{Лучшие результаты:}
+\begin{itemize}
+	\item хранятся в файле.
+\end{itemize}
+
+\paragraph{Звук и музыка:}
+\begin{itemize}
+	\item на каждом уровне своя музыка;
+	\item каждое действие персонажа во время игры сопровождается звуками;
+	\item в меню озвучиваются:
+	\begin{itemize}
+		\item переключения между пунктами;
+		\item подтверждение выбора.
+	\end{itemize}
+\end{itemize}
+
+\paragraph{Логгирование:}
+\begin{itemize}
+	\item четыре уровня:
+	\begin{itemize}
+		\item debug;
+		\item info;
+		\item warning;
+		\item error.
+	\end{itemize}
+	\item все пишутся в stdout;
+	\item пример записи <<LEVEL:[timestamp] Log message>>.
+\end{itemize}
+
+\paragraph{<<Ошибки>>:}
+\begin{itemize}
+	\item Отсутствие файла настроек/ошибка при его чтении:
+	\begin{enumerate}
+		\item вывести в лог информационное сообщение (в случае ошибки при чтении --- редупреждение) об отсутствии файла и том, что он будет создан и заполнен значениями по умолчанию
+		\item создать файл и заполнить значениями по умолчанию
+	\end{enumerate}
+	\item Отсутствие файла высоких очков:
+	\begin{enumerate}
+		\item вывести в лог информационное сообщение об отсутствии файла и том, что он будет создан.
+		\item создать пустой файл высоких очков
+	\end{enumerate}
+	\item Ошибка при чтении файла:
+	\begin{enumerate}
+		\item вывести в лог предупреждение о том, что файл не может быть прочитан, и поэтому будет перезаписан
+		\item сохранить старый файл с дополнением ``.corrupted<timestamp>'' к имени файла, где <timestamp> --- текущие время и дата
+		\item создать пустой файл
+	\end{enumerate}
+	\item Отсутствие файла музыки или звука:
+	\begin{enumerate}
+		\item вывести в лог предупреждение об отсутствующем файле.
+		\item в ситуации, когда звук должнен быть воспроизведён, не воспроизводить звук, и не генерировать ошибок.
+	\end{enumerate}
+	\item Отсутствие файла изображения любого из игровых объектов, или файла шрифта:
+	\begin{enumerate}
+		\item вывести в лог сообщение об ошибке, с указанием имени отсутствующего файла
+		\item завершить работу программы
+	\end{enumerate}
+\end{itemize}
+
+\subsection{Список вопросов}
+\begin{itemize}
+	\item что происходит с персонажем поистичение таймера, если уровень не закончен;
+	\item начисляются ли очки за оставшиеся "базовые жизни";
+	\item конечно ли (каково) число возможных дополнительных жизней.
+\end{itemize}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
+\section{Архитектура}
+На основании проведенного анализа технического задания, можно заключить, что приложение имеет 2 относительно независимых уровня:
+\begin{itemize}	
+	\item пользовательский;
+	\item системный.
+\end{itemize}
+
+Взаимодействие между уровнями осуществляется посредством передачи тех или иных комманд и/или сигналов. 
+
+\begin{figure}[thbp!]
+	\centering
+	\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered]
+	\begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
+	%nodes
+	\node[abstract, text width = 4cm](usr_level) {Пользовательский уровень};
+
+	\node[abstract, text width = 4cm, below  = of usr_level](sys_level) {Системный уровень};
+	
+	%edges    
+	\path (usr_level.west) edge [bend right = 105] node [left] {Запрос} (sys_level.west);
+	\path (sys_level.west) edge [bend left = 35] node [right] {Ответ} (usr_level.west);
+	
+	\path (sys_level.east) edge [bend right = 105] node [right] {Ответ} (usr_level.east);
+	\path (usr_level.east) edge [bend left = 35] node [left] {Запрос} (sys_level.east);
+	
+	\end{tikzpicture}
+	\caption{Схема взаимодействия уровней}
+\end{figure}
+
+
+Рассмотрим каждый из уровней отдельно.
+
+\subsection{Пользовательский уровень}
+
+Функции уровня:
+\begin{itemize}
+	\item ;
+	\item .
+\end{itemize}
+
+\subsection{Системный уровень}
+
+Функции уровня:
+\begin{itemize}
+	\item ;
+	\item .
+\end{itemize}
+
+\subsection{Совмещенная схема}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
+\section{Старая часть}
+\subsection{Модули}
+
 Можно выделить следующие логические части программы (делее --- модули), отвечающие за:
 \begin{itemize}
 	\item Звук.
@@ -74,7 +415,6 @@
   \centering
   \tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered]
   \begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
-  
   %nodes
     \node[abstract, text width = 4cm](Sound) {Звук};
     \node[abstract, text width = 4cm, right = of Sound](Logic) {Логика};
@@ -100,5 +440,87 @@
   \caption{Схема взаимодействия модулей}
 \end{figure}
 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
+\subsection{Информационные потоки}
+\begin{figure}[thbp!]
+	\begin{tikzpicture}[node distance = 2cm]
+	% Nodes
+	\node (launch) [startstop] {Старт};
+	\node (sys-chk) [process, below of=launch] {Системные проверки};
+	\node (game-exist) [decision, below of=sys-chk, yshift=-0.5cm] {Старая игра существует?};
+	\node (game-gen) [process, right of=game-exist, xshift=7cm] {Сгенерировать новую};
+	\node (game-load) [process, below of=game-exist, yshift=-0.5cm] {Загрузить игру};
+	\node (game-launch) [process, below of=game-load] {Запустить игру};
+	\node (game-play) [process, below of=game-launch] {Играть в игру};
 
+%	\node (exit) [startstop, below of=game] {выходной сигнал};
+	
+	% Edges
+	\draw [arrow] (launch) -- (sys-chk);
+	\draw [arrow] (sys-chk) -- (game-exist);
+	\draw [arrow] (game-exist) -- node[anchor=south] {нет} (game-gen);
+	\draw [arrow] (game-exist) -- node[anchor=west] {да} (game-load);
+	\draw [arrow] (game-gen) |- (game-load);
+	\draw [arrow] (game-load) -- (game-launch);
+	\draw [arrow] (game-launch) -- (game-play);
+
+	
+	\end{tikzpicture}
+	\vspace{10pt}
+	\caption{Общая схема игры (упрощенная)}
+\end{figure}
+
+
+
+\subsection{Процессы начала}
+\begin{figure}[thbp!]
+	\begin{tikzpicture}[node distance = 2cm]
+		% Nodes
+		\node[startstop](launch) {Старт};
+		\node[process, below of = launch](sys-chk) {Проверка наличия системных компонентов};
+		\node[decision, below of = sys-chk, yshift=-0.5cm](sys-chk-cond) {Проверка пройдена успешно?};
+		\node[process, right of = sys-chk-cond, xshift = 7cm](sys-rep) {Механизм исправления ошибок};
+		\node[process, below of = sys-chk-cond, yshift=-0.5cm](usr-chk) {Проверка наличия пользовательских компонентов};
+		\node[decision, below of = usr-chk, yshift=-0.5cm](usr-chk-cond) {Проверка пройдена успешно?};
+		\node[process, right of = usr-chk-cond, xshift = 7cm](usr-rep) {Механизм исправления ошибок};
+		\node[process, below of = usr-chk-cond, yshift=-0.5cm](game) {Запуск игры};
+		
+		% Edges
+		\draw [arrow] (launch) -- (sys-chk);
+		\draw [arrow] (sys-chk) -- (sys-chk-cond);
+		\draw [arrow] (sys-chk-cond) -- node[anchor=south] {нет} (sys-rep);
+		\draw [arrow] (sys-chk-cond) -- node[anchor=west] {да} (usr-chk);
+		\draw [arrow] (sys-rep) |- (sys-chk);
+		\draw [arrow] (usr-chk) -- (usr-chk-cond);
+		\draw [arrow] (usr-chk-cond) -- node[anchor=south] {нет} (usr-rep);
+		\draw [arrow] (usr-chk-cond) -- node[anchor=west] {да} (game);		
+		\draw [arrow] (usr-rep) |- (usr-chk);
+		
+	\end{tikzpicture}
+	\vspace{10pt}
+	\caption{Группа процессов начала}
+\end{figure}
+
+\subsection{Процессы игры}
+\begin{figure}[thbp!]
+	\centering
+	\begin{tikzpicture}[node distance = 2cm, auto]
+	
+	\end{tikzpicture}
+	\vspace{10pt}
+	\caption{Группа процессов игры}
+\end{figure}
+
+\subsection{Процессы завершения}
+\begin{figure}[thbp!]
+	\centering
+	\begin{tikzpicture}[node distance = 2cm, auto]
+	
+	\end{tikzpicture}
+	\vspace{10pt}
+	\caption{Группа процессов завершения}
+\end{figure}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \end{document}
