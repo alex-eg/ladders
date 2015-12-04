@@ -1,11 +1,11 @@
-\documentclass[12pt,a4paper,fullpage]{article}
+\documentclass[12pt,a4paper,fullpage,titlepage]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[russian]{babel}
 \usepackage{fullpage}
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{placeins}
-\usepackage{tabulary}
+\usepackage{tabularx}
 \usepackage{float}
 
 \usepackage{tikz} %for images and graphics
@@ -53,25 +53,11 @@
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
-\section{Хронология проекта}
-\begin{tabulary}{\linewidth}{|C|C|C|L|}
-	\hline
-	№ & ДатаН & ДатаК & Что\\
-	\hline
-	1 & 2015-04-06 & 2015-07-18 & Формулировка и согласование идеи проекта \\
-	\hline
-	2 & 2015-08-01 & 2015-08-29 & Начало работы над архитерктурой проекта \\
-	\hline
-	3 & 2015-11-12 &  & Персмотр концепции архитектуры, повторное начало работ \\
-	\hline
-	4 &  &  &  \\
-	\hline
-	5 &  &  &  \\
-	\hline
-	&  &  &  \\
-	\hline
-\end{tabulary}
-\vspace{10pt}
+\listoftables
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%\newpage
+\listoffigures
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
@@ -175,9 +161,8 @@
 \end{itemize}
 
 \paragraph{Управление} осуществляется с клавиатуры или геймпада.\\
-Команды и дефолтные биндинги:\\
-
-\begin{tabulary}{\linewidth}{|C|C|C|}
+\begin{table}[h]
+\begin{tabularx}{\textwidth}{|X|c|c|}
 	\hline
 	Команда & Клавиатура & Геймпад\\
 	\hline
@@ -199,8 +184,9 @@
 	\hline
 	Прокрутить камеру & стрелки & правый джойстик \\
 	\hline
-\end{tabulary}
-\vspace{10pt}
+\end{tabularx}
+\caption{команды и дефолтные биндинги.}
+\end{table}
 
 Нажатие <<Esc>> во время игры --- постановка игры на паузу и вызов меню с предложениям продолжить или завершить текущую сессию.\\
 
@@ -356,30 +342,65 @@
 
 Рассмотрим каждый из уровней отдельно.
 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
 \subsection{Пользовательский уровень}
 
-Функции уровня:
+\paragraph{Функции уровня:}
 \begin{itemize}
-	\item ;
-	\item .
+	\item Взаимодействие с пользователем:
+	\begin{itemize}
+		\item осуществляется через GUI;
+		\item ;
+		\item ;
+		\item ;
+		\item .
+	\end{itemize}
+	\item Передача команд системному уровню.\\
 \end{itemize}
 
+\paragraph{Компоненты уровня:}
+\begin{itemize}
+	\item GUI:
+	\begin{itemize}
+		\item ;
+		\item .
+	\end{itemize}
+	\item .\\
+\end{itemize}
+
+Таким образом, пользовательский уровень является <<управляющим воздействием>> \footnote{в терминологии дисциплины <<Управление проектами>> Григорьева В.К.} для cистемного уровня.\\
+
+\paragraph{Схема уровня:}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
 \subsection{Системный уровень}
 
-Функции уровня:
+\paragraph{Функции уровня:}
 \begin{itemize}
 	\item ;
-	\item .
+	\item .\\
 \end{itemize}
 
+\paragraph{Компоненты уровня:}
+\begin{itemize}
+	\item ;
+	\item .\\
+\end{itemize}
+
+\paragraph{Схема уровня:}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
 \subsection{Совмещенная схема}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
 \section{Последовательность разработки}
-\subsection{Основные этапы}
-
-\begin{tabulary}{\linewidth}{|C|C|}
+\subsection{Основные этапы разработки}
+\begin{table}[h]
+\begin{tabularx}{\textwidth}{|c|X|}
 	\hline
 	 № & Содержание\\
 	\hline
@@ -393,10 +414,14 @@
 	\hline
 	 & \\
 	\hline
-\end{tabulary}
+\end{tabularx}
+\caption{основные этапы разработки.}
+\end{table}
 
 \subsection{Стадии имплементации}
-\begin{tabulary}{\linewidth}{|C|C|}
+
+\begin{table}[h]
+\begin{tabularx}{\textwidth}{|c|X|}
 	\hline
 	№ & Содержание\\
 	\hline
@@ -404,7 +429,92 @@
 	\hline
 	& \\
 	\hline
-\end{tabulary}
+\end{tabularx}
+\caption{стадии имплементации.}
+\end{table}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
+\section{Общая информация}
+\subsection{Команда проекта}
+\begin{table}[h]
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		Кто & Роль \\
+		\hline
+		\href{https://github.com/taptap/}{taptap} & формулировка идеи и технического задания\\
+		\hline
+		\href{https://github.com/attillax}{attillax} & согласование технического задания, разработка архитектуры\\
+		\hline
+		\href{https://github.com/pankshok}{pankshok} & исправление опечаток =)\\
+		\hline
+		& \\
+		\hline
+	\end{tabularx}
+	\caption{команда проекта.}
+\end{table}
+
+\subsection{Репозитории проекта}
+\begin{table}[h]
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		№ & Ссылка \\
+		\hline
+		1 & \href{https://github.com/taptap/ladders}{основной} \\
+		\hline
+		& \\
+		\hline
+	\end{tabularx}
+	\caption{репозитории проекта.}
+\end{table}
+
+\subsection{Хронология проекта}
+\begin{table}[h]
+\begin{tabularx}{\textwidth}{|c|c|c|X|}
+	\hline
+	№ & ДатаН & ДатаК & Что\\
+	\hline
+	1 & 2015-04-06 & 2015-07-18 & Формулировка и согласование идеи проекта \\
+	\hline
+	2 & 2015-08-01 & 2015-08-29 & Начало работы над архитерктурой проекта \\
+	\hline
+	3 & 2015-11-12 & 2015-11-12 & Персмотр концепции архитектуры \\
+	\hline
+	4 & 2015-11-12 &  & Разработка архитектуры проекта\\
+	\hline
+	5 &  &  &  \\
+	\hline
+	&  &  &  \\
+	\hline
+\end{tabularx}
+\caption{хронология проекта.}
+\end{table}
+
+\subsection{Список инструментов}
+\begin{table}[h]
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		Что & Для чего \\
+		\hline
+		Linux & операционная система\\
+		\hline
+		\TeX & ведение документации\\
+		\hline
+		Tikz & построение диаграмм для \TeX-документации\\
+		\hline
+		\TeX-Studio & IDE для \TeX \\
+		\hline
+		Git (via GitHub) & Система контроля версий\\
+		\hline
+		Terminal & Осуществление коммитов\\
+		\hline
+		Gimp & подготовка избражений и прочего графического материала \\
+		\hline
+		& \\
+		\hline
+	\end{tabularx}
+	\caption{список инструментов.}
+\end{table}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
