@@ -6,19 +6,9 @@
 \usepackage{graphicx}
 \usepackage{placeins}
 \usepackage{tabularx}
-\usepackage{float}
 
 \usepackage{tikz} %for images and graphics
 \usetikzlibrary{shapes, positioning, arrows}
-
-%defining img insert func
-\newcommand{\pics}[3]{
-	\begin{figure}[htbp!]
-		\noindent 
-		\includegraphics[scale=#1]{./Pics/#2}
-		\caption{#3}
-	\end{figure}
-	\FloatBarrier}
 
 %definig new tikz primitives
 \tikzstyle{startstop} = [ellipse, minimum width=3cm, minimum height=1cm,text centered, text width = 3.5cm, draw=black]
@@ -304,14 +294,102 @@
 \begin{itemize}
 	\item что происходит с персонажем поистичение таймера, если уровень не закончен;
 	\item начисляются ли очки за оставшиеся "базовые жизни";
-	\item конечно ли (каково) число возможных дополнительных жизней.
+	\item конечно ли (каково) число возможных дополнительных жизней;
+	\item каков механизм генерации жизней и монеток:
+	\begin{itemize}
+		\item вместе с уровнем/комнатой;
+		\item спонтанно.
+	\end{itemize}
 \end{itemize}
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
 \section{Архитектура}
-На основании проведенного анализа технического задания, можно заключить, что приложение имеет 2 относительно независимых уровня:
+На основании проведенного анализа технического задания, можно заключить, что приложение состоит из ряда компонентов, отвечающих за:
+\begin{itemize}	
+	\item ведение статистики;	
+	\item логгирование;	
+	\item отслеживание ошибок;	
+	\item связь с пользователем;	
+	\item генерацию объектов окружения;	
+	\item аудио-визуальное сопровождение игрового процесса;
+	\item выполнение необходимых расчетов в соответствии с <<моделью мира>> \footnote{<<Mодель мира>> --- физические и логические законы игровой реальности.}.\\
+\end{itemize}
+
+Таким образом, можно выделить следующие системные модули и функции, ими выполняемые:
+\begin{itemize}
+	\item интерфейс пользователя:
+	\begin{itemize}
+		\item обеспечение взаимодействия (общения) между пользователем и системой;
+		\item хранение пользовательских настроек;
+		\item передача соответствующих управляющих сигналов в другие блоки.
+	\end{itemize}
+	\item звук:
+	\begin{itemize}
+		\item проигрывание звуковых схем по соответсвующим вызовам;
+		\item переключение звуковых схем по запросу пользователя.
+	\end{itemize}
+	\item графика:
+	\begin{itemize}
+		\item своевременное отображение изменений в области игры в ходе ее осуществления;
+		\item отображение графической схемы в соответсвии с пользовательскими настройками.
+	\end{itemize}
+	\item статистика:
+	\begin{itemize}
+		\item хранение и обработка текущих игровых данных (таблицы очков).
+	\end{itemize}
+	\item логгирование:
+	\begin{itemize}
+		\item составление файла логов определенного формата.\\
+	\end{itemize}	
+	\item ошибки:
+	\begin{itemize}
+		\item отслеживание наличия необходимых компонентов;
+		\item решение пролем их отсутвия;
+		\item информирование пользователя о внештатных ситуациях и конфликтах.
+	\end{itemize}
+	\item генераторы:	
+	\begin{itemize}
+		\item составление уровней;
+		\item запонение комнат.
+	\end{itemize}
+	\item <<модель мира>> (<<физика>> игры):
+	\begin{itemize}
+		\item выполнение необходимых расчетов повреждений/перемещений персонажа.
+	\end{itemize}
+\end{itemize}
+
+\begin{figure}[thbp!]
+	\centering
+	\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered]
+	\begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
+	%nodes
+	\node[abstract, text width = 4cm](Sound) {Звук};
+	\node[abstract, text width = 4cm, right = of Sound](Logic) {Логика};
+	\node[abstract, text width = 4cm, below  = of Sound](Graph) {Графика};
+	\node[abstract, text width = 4cm, right = of Graph](Stat) {Статистика};
+	\node[abstract, text width = 4cm, below  = of Graph](UI) {Интерфейс пользователя};
+	\node[abstract, text width = 4cm, right = of UI](Mistakes) {Ошибки};
+    
+    %edges    
+	\path 
+	(Logic) edge (Stat)
+	edge (Sound)
+	edge [bend left = 5] (Graph);
+	\path 
+	(Graph) edge [bend left = 5] (Logic);
+	\path 
+	(Stat) edge (Graph);
+	\path 
+	(UI) edge [bend left = 90] (Sound)
+	edge [bend left = 90] (Graph);
+	
+	\end{tikzpicture}
+	\caption{старая схема взаимодействия модулей.}
+\end{figure}
+
+Все компоненты можно разделить на два относительно независимых уровня:
 \begin{itemize}	
 	\item пользовательский;
 	\item системный.
@@ -336,9 +414,8 @@
 	\path (usr_level.east) edge [bend left = 35] node [left] {Запрос} (sys_level.east);
 	
 	\end{tikzpicture}
-	\caption{Схема взаимодействия уровней}
+	\caption{схема взаимодействия уровней.}
 \end{figure}
-
 
 Рассмотрим каждый из уровней отдельно.
 
@@ -369,7 +446,7 @@
 	\item .\\
 \end{itemize}
 
-Таким образом, пользовательский уровень является <<управляющим воздействием>> \footnote{в терминологии дисциплины <<Управление проектами>> Григорьева В.К.} для cистемного уровня.\\
+Таким образом, пользовательский уровень является <<управляющим воздействием>> \footnote{В терминологии дисциплины <<Управление проектами>> Григорьева В.К.} для cистемного уровня.\\
 
 \paragraph{Схема уровня:}
 
@@ -518,94 +595,9 @@
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
+
 \section{Старая часть}
-\subsection{Модули}
 
-Можно выделить следующие логические части программы (делее --- модули), отвечающие за:
-\begin{itemize}
-	\item Звук.
-	\item Графика.
-	\item Логика.
-	\item Интерфейс пользователя.
-	\item Статистика.
-	\item Ошибки.
-	\item .\\
-\end{itemize}
-
-\subsection{Функции модулей}
-\subsubsection{Звук}
-\begin{itemize}
-	\item Проигрывание определенных звуков по вызовам из других модулей.
-	\item Переключение звуковых схем.
-	\item .\\
-\end{itemize}
-
-\subsubsection{Графика}
-\begin{itemize}
-	\item Отображение соответствующих графических схем.
-	\item .\\
-\end{itemize}
-
-\subsubsection{Логика}
-\begin{itemize}
-	\item Текущие вычисления (урон и прочее).
-	\item Генераторы.
-	\item .\\
-\end{itemize}
-
-\subsubsection{Интерфейс пользователя}
-\begin{itemize}
-	\item Хранение пользовательских настроек.
-	\item Передача соответствующих сигналов в другие блоки.
-	\item .\\
-\end{itemize}
-
-\subsubsection{Статистика}
-\begin{itemize}
-	\item Хранение и обработка текущих данных (таблицы очков и прочее).
-	\item .\\
-\end{itemize}
-
-\subsubsection{Ошибки}
-\begin{itemize}
-	\item .\\
-\end{itemize}
-
-
-\subsection{Взаимодействие модулей}
-Взаимодействие модулей может быть проиллюстрировано следующим образом:\\
-
-\begin{figure}[thbp!]
-  \centering
-  \tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered]
-  \begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
-  %nodes
-    \node[abstract, text width = 4cm](Sound) {Звук};
-    \node[abstract, text width = 4cm, right = of Sound](Logic) {Логика};
-    \node[abstract, text width = 4cm, below  = of Sound](Graph) {Графика};
-    \node[abstract, text width = 4cm, right = of Graph](Stat) {Статистика};
-    \node[abstract, text width = 4cm, below  = of Graph](UI) {Интерфейс пользователя};
-    \node[abstract, text width = 4cm, right = of UI](Mistakes) {Ошибки};
-    
-  %edges    
-	\path 
-		(Logic) edge (Stat)
-				edge (Sound)
-				edge [bend left = 5] (Graph);
-	\path 
-		(Graph) edge [bend left = 5] (Logic);
-	\path 
-		(Stat) edge (Graph);
-	\path 
-		(UI) edge [bend left = 90] (Sound)
-			 edge [bend left = 90] (Graph);
-    
-  \end{tikzpicture}
-  \caption{Схема взаимодействия модулей}
-\end{figure}
-
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-\newpage
 \subsection{Информационные потоки}
 \begin{figure}[thbp!]
 	\begin{tikzpicture}[node distance = 2cm]
@@ -664,26 +656,6 @@
 	\end{tikzpicture}
 	\vspace{10pt}
 	\caption{Группа процессов начала}
-\end{figure}
-
-\subsection{Процессы игры}
-\begin{figure}[thbp!]
-	\centering
-	\begin{tikzpicture}[node distance = 2cm, auto]
-	
-	\end{tikzpicture}
-	\vspace{10pt}
-	\caption{Группа процессов игры}
-\end{figure}
-
-\subsection{Процессы завершения}
-\begin{figure}[thbp!]
-	\centering
-	\begin{tikzpicture}[node distance = 2cm, auto]
-	
-	\end{tikzpicture}
-	\vspace{10pt}
-	\caption{Группа процессов завершения}
 \end{figure}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
