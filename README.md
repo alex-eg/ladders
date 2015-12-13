@@ -1,28 +1,28 @@
 # ladders
-Small platform game
+Small platform game.
 
 ## How to use Makefile for compilation of the documents
-All compiled files are placed in the root directory of the project.\
-The LaTeX compilation mistakes are ignored.
+All compiled files are placed in the root directory of the project. 
+The LaTeX compilation mistakes (e.g. missed image files) are ignored.
 
 ###Available Commands
-1. To compile the architecture of the project you will need to execute the following command  :
+1. To compile the architecture of the project you will need to execute the following command:
 ```
 make
 ```
-1. To compile the diagrams you will need to execute the following command:
+2. To compile the diagrams you will need to execute the following command:
 ```
 make diagrams
 ```
-1. To compile the idea of the project you will need to execute the following command:
+3. To compile the idea of the project you will need to execute the following command:
 ```
 make idea
 ```
-1. To compile the notes about the the idea of the project you will need to execute the following command:
+4. To compile the notes about the the idea of the project you will need to execute the following command:
 ```
 make idea-notes
 ```
-1. To remove all compiled files you will need to execute the following command:
+5. To remove all compiled files you will need to execute the following command:
 ```
 make clean
 ```
