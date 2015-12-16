@@ -13,6 +13,12 @@
 %definig new tikz primitives connection shemes
 \tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered, text width=4cm]
 
+\tikzstyle{level1}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered, text width=4cm]
+
+\tikzstyle{level2}=[rectangle, draw=black, rounded corners, fill=green!3, minimum height=4cm, minimum width=6cm, text centered, text width=5cm, text depth=3cm]
+
+\tikzstyle{level3}=[rectangle, draw=black, rounded corners, fill=red!3, minimum height=8cm, minimum width=14cm, text centered, text width=13cm, text depth=7cm]
+
 %definig new tikz primitives for workflows
 \tikzstyle{startstop} = [ellipse, minimum width=3cm, minimum height=1cm, text centered, text width=3.5cm, draw=black]
 
@@ -366,18 +372,18 @@
 
 \begin{figure}[thbp!]
 \centering
-\begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
+\begin{tikzpicture}[node distance=0.5cm, auto, ->, >=stealth']
 	%nodes
-	\node (Sound) [abstract] {Звук};
-	\node (Graph) [abstract, right=of Sound] {Графика};	
-	\node (UI) [abstract, right=of Graph] {Интерфейс пользователя};
+	\node (Sound) [level1] {Звук};
+	\node (Graph) [level1, right=of Sound] {Графика};	
+	\node (UI) [level1, right=of Graph] {Интерфейс пользователя};
 	
-	\node (Stat) [abstract, below=of Sound] {Статистика};
-	\node (Mistakes) [abstract, right=of Stat] {Ошибки};
-	\node (Logs) [abstract, right=of Mistakes] {Логирование};
+	\node (Stat) [level1, below=of Sound] {Статистика};
+	\node (Mistakes) [level1, right=of Stat] {Ошибки};
+	\node (Logs) [level1, right=of Mistakes] {Логирование};
 	
-	\node (Physics) [abstract, below=of Stat] {Физика};
-	\node (Generators) [abstract, right=of Physics] {Генераторы};
+	\node (Physics) [level1, below=of Stat] {Физика};
+	\node (Generators) [level1, right=of Physics] {Генераторы};
 
 \end{tikzpicture}
 \caption{Компоненты игры.}
@@ -386,7 +392,7 @@
 В свою очередь, компоненты могут быть сгруппированы в более крупные логические элементы --- модули:
 
 \begin{itemize}
-	\item <<Логика>> игры:	
+	\item Логика игры:	
 	\begin{itemize}
 		\item технические компоненты:
 		\begin{itemize}
@@ -409,11 +415,19 @@
 \centering
 \begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
 	%nodes
-	\node (Logic) [abstract] {<<Логика>> игры};
-	\node (AV) [abstract, right=of Logic] {Аудио-визуальное сопроводжение игры};	
-	\node (UI) [abstract, right=of AV] {Интерфейс пользователя};
-	
-\end{tikzpicture}
+	\node (Logic) [level2, minimum height=7cm, text depth=6cm] {Логика игры};	
+		\node (Mistakes) [level1, yshift=1.5cm] {Ошибки};
+		\node (Logs) [level1, below of=Mistakes] {Логирование};	
+		\node (Stat) [level1, below of=Logs] {Статистика};
+		\node (Generators) [level1, below of=Stat] {Генераторы};
+		\node (Physics) [level1, below of=Generators] {Физика};	
+
+	\node (AV) [level2, right=of Logic, yshift=1.5cm] {Аудио-визуальное сопровождение игры};
+		\node (Sound) [level1,right=of Mistakes, xshift=1.5cm] {Звук};
+		\node (Graph) [level1, below of=Sound] {Графика};
+		
+	\node (UI) [level1, below=of AV, fill=green!3, minimum width=6cm, minimum height=1.5cm, text width=6cm] {Интерфейс пользователя};
+5\end{tikzpicture}
 \caption{Модули игры.}
 \end{figure}
 
@@ -428,13 +442,24 @@
 \centering
 \begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
 	%nodes
-	\node (Sys) [abstract] {Системный уровень};	
-	\node (UI) [abstract, right=of Sys] {Пользовательский уровень};
+	\node (Sys) [level3] {Системный уровень};	
+		\node (Logic) [level2, minimum height=6.5cm, text depth=5cm, xshift=-3.5cm, yshift=-0.5cm] {Логика игры};	
+			\node (Mistakes) [level1, xshift=-3.5cm, yshift=1cm] {Ошибки};
+			\node (Logs) [level1, below of=Mistakes] {Логирование};	
+			\node (Stat) [level1, below of=Logs] {Статистика};
+			\node (Generators) [level1, below of=Stat] {Генераторы};
+			\node (Physics) [level1, below of=Generators] {Физика};		
+		\node (AV) [level2, right=of Logic, yshift=1cm] {Аудио-визуальное сопровождение игры};
+			\node (Sound) [level1,right=of Mistakes, xshift=1.7cm, yshift=-0.5cm] {Звук};
+			\node (Graph) [level1, below of=Sound] {Графика};
+			
+	\node (UI) [level1, below=of Sys, fill=red!3, minimum width=14cm, minimum height=1.5cm, text width=13cm] {Интерфейс пользователя};
 	
 \end{tikzpicture}
 \caption{Уровни игры.}
 \end{figure}
 
+\newpage
 Взаимодействие между уровнями осуществляется посредством передачи тех или иных комманд и/или сигналов. 
 
 \begin{figure}[thbp!]
