@@ -10,12 +10,15 @@
 \usepackage{tikz} %for images and graphics
 \usetikzlibrary{shapes, positioning, arrows}
 
-%definig new tikz primitives
-\tikzstyle{startstop} = [ellipse, minimum width=3cm, minimum height=1cm,text centered, text width = 3.5cm, draw=black]
+%definig new tikz primitives connection shemes
+\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered, text width=4cm]
 
-\tikzstyle{io} = [trapezium, trapezium left angle=60, trapezium right angle=120, minimum width=3cm, minimum height=1cm, text centered, text width = 3.5cm, draw=black]
+%definig new tikz primitives for workflows
+\tikzstyle{startstop} = [ellipse, minimum width=3cm, minimum height=1cm, text centered, text width=3.5cm, draw=black]
 
-\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width = 6cm, draw=black]
+\tikzstyle{io} = [trapezium, trapezium left angle=60, trapezium right angle=120, minimum width=3cm, minimum height=1cm, text centered, text width=3.5cm, draw=black]
+
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=6cm, draw=black]
 
 \tikzstyle{decision} = [diamond, aspect=4, text centered, draw=black]
 
@@ -317,7 +320,7 @@
 	\item выполнение необходимых расчетов в соответствии с <<моделью мира>> \footnote{<<Mодель мира>> --- физические и логические законы игровой реальности.}.\\
 \end{itemize}
 
-Таким образом, можно выделить следующие системные модули и функции, ими выполняемые:
+Таким образом, можно выделить следующие системные компоненты и функции, ими выполняемые:
 \begin{itemize}
 	\item интерфейс пользователя:
 	\begin{itemize}
@@ -360,64 +363,125 @@
 	\end{itemize}
 \end{itemize}
 
+
 \begin{figure}[thbp!]
-	\centering
-	\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered]
-	\begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
+\centering
+\begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
 	%nodes
-	\node[abstract, text width = 4cm](Sound) {Звук};
-	\node[abstract, text width = 4cm, right = of Sound](Logic) {Логика};
-	\node[abstract, text width = 4cm, below  = of Sound](Graph) {Графика};
-	\node[abstract, text width = 4cm, right = of Graph](Stat) {Статистика};
-	\node[abstract, text width = 4cm, below  = of Graph](UI) {Интерфейс пользователя};
-	\node[abstract, text width = 4cm, right = of UI](Mistakes) {Ошибки};
-    
-    %edges    
-	\path 
-	(Logic) edge (Stat)
-	edge (Sound)
-	edge [bend left = 5] (Graph);
-	\path 
-	(Graph) edge [bend left = 5] (Logic);
-	\path 
-	(Stat) edge (Graph);
-	\path 
-	(UI) edge [bend left = 90] (Sound)
-	edge [bend left = 90] (Graph);
+	\node (Sound) [abstract] {Звук};
+	\node (Graph) [abstract, right=of Sound] {Графика};	
+	\node (UI) [abstract, right=of Graph] {Интерфейс пользователя};
 	
-	\end{tikzpicture}
-	\caption{Старая схема взаимодействия модулей.}
+	\node (Stat) [abstract, below=of Sound] {Статистика};
+	\node (Mistakes) [abstract, right=of Stat] {Ошибки};
+	\node (Logs) [abstract, right=of Mistakes] {Логирование};
+	
+	\node (Physics) [abstract, below=of Stat] {Физика};
+	\node (Generators) [abstract, right=of Physics] {Генераторы};
+
+\end{tikzpicture}
+\caption{Компоненты игры.}
 \end{figure}
 
-Все компоненты можно разделить на два относительно независимых уровня:
+В свою очередь, компоненты могут быть сгруппированы в более крупные логические элементы --- модули:
+
+\begin{itemize}
+	\item <<Логика>> игры:	
+	\begin{itemize}
+		\item технические компоненты:
+		\begin{itemize}
+			\item ошибки;
+			\item логирование;
+		\end{itemize}
+		\item статистика;	
+		\item генераторы;
+		\item физика.
+	\end{itemize}
+	\item Аудио-визуальное сопроводжение игры:
+	\begin{itemize}
+		\item звук;
+		\item графика.
+	\end{itemize}	
+	\item Интерфейс пользователя.
+\end{itemize}
+
+\begin{figure}[thbp!]
+\centering
+\begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
+	%nodes
+	\node (Logic) [abstract] {<<Логика>> игры};
+	\node (AV) [abstract, right=of Logic] {Аудио-визуальное сопроводжение игры};	
+	\node (UI) [abstract, right=of AV] {Интерфейс пользователя};
+	
+\end{tikzpicture}
+\caption{Модули игры.}
+\end{figure}
+
+\newpage
+Все модули можно разделить на два относительно независимых уровня:
 \begin{itemize}	
 	\item пользовательский;
 	\item системный.
 \end{itemize}
 
+\begin{figure}[thbp!]
+\centering
+\begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
+	%nodes
+	\node (Sys) [abstract] {Системный уровень};	
+	\node (UI) [abstract, right=of Sys] {Пользовательский уровень};
+	
+\end{tikzpicture}
+\caption{Уровни игры.}
+\end{figure}
+
 Взаимодействие между уровнями осуществляется посредством передачи тех или иных комманд и/или сигналов. 
 
 \begin{figure}[thbp!]
 	\centering
-	\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered]
 	\begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
 	%nodes
-	\node[abstract, text width = 4cm](usr_level) {Пользовательский уровень};
+	\node (usr_level) [abstract] {Пользовательский уровень};
 
-	\node[abstract, text width = 4cm, below  = of usr_level](sys_level) {Системный уровень};
+	\node (sys_level) [abstract, below  = of usr_level] {Системный уровень};
 	
 	%edges    
-	\path (usr_level.west) edge [bend right = 105] node [left] {Запрос} (sys_level.west);
-	\path (sys_level.west) edge [bend left = 35] node [right] {Ответ} (usr_level.west);
+	\path (usr_level.west) edge [bend right=105] node [left] {Запрос} (sys_level.west);
+	\path (sys_level.west) edge [bend left=35] node [right] {Ответ} (usr_level.west);
 	
-	\path (sys_level.east) edge [bend right = 105] node [right] {Ответ} (usr_level.east);
-	\path (usr_level.east) edge [bend left = 35] node [left] {Запрос} (sys_level.east);
+	\path (sys_level.east) edge [bend right=105] node [right] {Ответ} (usr_level.east);
+	\path (usr_level.east) edge [bend left=35] node [left] {Запрос} (sys_level.east);
 	
 	\end{tikzpicture}
 	\caption{Схема взаимодействия уровней.}
 \end{figure}
 
 Рассмотрим каждый из уровней отдельно.
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
+\subsection{Системный уровень}
+
+\paragraph{Функции уровня:}
+\begin{itemize}
+	\item ;
+	\item .\\
+\end{itemize}
+
+\paragraph{Компоненты уровня:}
+\begin{itemize}
+	\item ;
+	\item .\\
+\end{itemize}
+
+\paragraph{Схема уровня:}
+
+\begin{figure}[thbp!]
+	\centering
+	
+	\caption{Схема системного уровня.}
+\end{figure}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
@@ -449,28 +513,27 @@
 Таким образом, пользовательский уровень является <<управляющим воздействием>> \footnote{В терминологии дисциплины <<Управление проектами>> Григорьева В.К.} для cистемного уровня.\\
 
 \paragraph{Схема уровня:}
-
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-\newpage
-\subsection{Системный уровень}
-
-\paragraph{Функции уровня:}
-\begin{itemize}
-	\item ;
-	\item .\\
-\end{itemize}
-
-\paragraph{Компоненты уровня:}
-\begin{itemize}
-	\item ;
-	\item .\\
-\end{itemize}
-
-\paragraph{Схема уровня:}
+\begin{figure}[thbp!]
+	\centering
+	
+	\caption{Схема пользовательского уровня.}
+\end{figure}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
 \subsection{Совмещенная схема}
+\begin{figure}[thbp!]
+	\centering
+	
+	\caption{Совмещенная схема модулей.}
+\end{figure}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
+\subsection{Список вопросов}
+\begin{itemize}
+	\item
+\end{itemize}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
