@@ -10,12 +10,21 @@
 \usepackage{tikz} %for images and graphics
 \usetikzlibrary{shapes, positioning, arrows}
 
-%definig new tikz primitives
-\tikzstyle{startstop} = [ellipse, minimum width=3cm, minimum height=1cm,text centered, text width = 3.5cm, draw=black]
+%definig new tikz primitives connection shemes
+\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered, text width=4cm]
 
-\tikzstyle{io} = [trapezium, trapezium left angle=60, trapezium right angle=120, minimum width=3cm, minimum height=1cm, text centered, text width = 3.5cm, draw=black]
+\tikzstyle{level1}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered, text width=4cm]
 
-\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width = 6cm, draw=black]
+\tikzstyle{level2}=[rectangle, draw=black, rounded corners, fill=green!3, minimum height=4cm, minimum width=6cm, text centered, text width=5cm, text depth=3cm]
+
+\tikzstyle{level3}=[rectangle, draw=black, rounded corners, fill=red!3, minimum height=8cm, minimum width=14cm, text centered, text width=13cm, text depth=7cm]
+
+%definig new tikz primitives for workflows
+\tikzstyle{startstop} = [ellipse, minimum width=3cm, minimum height=1cm, text centered, text width=3.5cm, draw=black]
+
+\tikzstyle{io} = [trapezium, trapezium left angle=60, trapezium right angle=120, minimum width=3cm, minimum height=1cm, text centered, text width=3.5cm, draw=black]
+
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=6cm, draw=black]
 
 \tikzstyle{decision} = [diamond, aspect=4, text centered, draw=black]
 
@@ -300,12 +309,23 @@
 		\item вместе с уровнем/комнатой;
 		\item спонтанно.
 	\end{itemize}
+	\item логи:
+	\begin{itemize}
+		\item зачем;
+		\item механизм генерации:
+		\begin{itemize}
+			\item что и при каких условиях записывается.
+		\end{itemize}
+	\end{itemize}
+	\item 
 \end{itemize}
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
 \section{Архитектура}
+
+\subsection{Компоненты игры}
 На основании проведенного анализа технического задания, можно заключить, что приложение состоит из ряда компонентов, отвечающих за:
 \begin{itemize}	
 	\item ведение статистики;	
@@ -317,7 +337,7 @@
 	\item выполнение необходимых расчетов в соответствии с <<моделью мира>> \footnote{<<Mодель мира>> --- физические и логические законы игровой реальности.}.\\
 \end{itemize}
 
-Таким образом, можно выделить следующие системные модули и функции, ими выполняемые:
+Таким образом, можно выделить следующие системные компоненты и функции, ими выполняемые:
 \begin{itemize}
 	\item интерфейс пользователя:
 	\begin{itemize}
@@ -360,68 +380,288 @@
 	\end{itemize}
 \end{itemize}
 
+
 \begin{figure}[thbp!]
-	\centering
-	\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered]
-	\begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
+\centering
+\begin{tikzpicture}[node distance=0.5cm, auto, ->, >=stealth']
 	%nodes
-	\node[abstract, text width = 4cm](Sound) {Звук};
-	\node[abstract, text width = 4cm, right = of Sound](Logic) {Логика};
-	\node[abstract, text width = 4cm, below  = of Sound](Graph) {Графика};
-	\node[abstract, text width = 4cm, right = of Graph](Stat) {Статистика};
-	\node[abstract, text width = 4cm, below  = of Graph](UI) {Интерфейс пользователя};
-	\node[abstract, text width = 4cm, right = of UI](Mistakes) {Ошибки};
-    
-    %edges    
-	\path 
-	(Logic) edge (Stat)
-	edge (Sound)
-	edge [bend left = 5] (Graph);
-	\path 
-	(Graph) edge [bend left = 5] (Logic);
-	\path 
-	(Stat) edge (Graph);
-	\path 
-	(UI) edge [bend left = 90] (Sound)
-	edge [bend left = 90] (Graph);
+	\node (Sound) [level1] {Звук};
+	\node (Graph) [level1, right=of Sound] {Графика};	
+	\node (UI) [level1, right=of Graph] {Интерфейс пользователя};
 	
-	\end{tikzpicture}
-	\caption{Старая схема взаимодействия модулей.}
+	\node (Stat) [level1, below=of Sound] {Статистика};
+	\node (Mistakes) [level1, right=of Stat] {Ошибки};
+	\node (Logs) [level1, right=of Mistakes] {Логирование};
+	
+	\node (Physics) [level1, below=of Stat] {Физика};
+	\node (Generators) [level1, right=of Physics] {Генераторы};
+
+\end{tikzpicture}
+\caption{Компоненты игры.}
 \end{figure}
 
-Все компоненты можно разделить на два относительно независимых уровня:
+В свою очередь, компоненты могут быть сгруппированы в более крупные логические элементы --- модули:
+
+\begin{itemize}
+	\item Логика игры:	
+	\begin{itemize}
+		\item технические компоненты:
+		\begin{itemize}
+			\item ошибки;
+			\item логирование;
+		\end{itemize}
+		\item статистика;	
+		\item генераторы;
+		\item физика.
+	\end{itemize}
+	\item Аудио-визуальное сопроводжение игры:
+	\begin{itemize}
+		\item звук;
+		\item графика.
+	\end{itemize}	
+	\item Интерфейс пользователя.
+\end{itemize}
+
+\begin{figure}[thbp!]
+\centering
+\begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
+	%nodes
+	\node (Logic) [level2, minimum height=7cm, text depth=6cm] {Логика игры};	
+		\node (Mistakes) [level1, yshift=1.5cm] {Ошибки};
+		\node (Logs) [level1, below of=Mistakes] {Логирование};	
+		\node (Stat) [level1, below of=Logs] {Статистика};
+		\node (Generators) [level1, below of=Stat] {Генераторы};
+		\node (Physics) [level1, below of=Generators] {Физика};	
+
+	\node (AV) [level2, right=of Logic, yshift=1.5cm] {Аудио-визуальное сопровождение игры};
+		\node (Sound) [level1,right=of Mistakes, xshift=1.5cm] {Звук};
+		\node (Graph) [level1, below of=Sound] {Графика};
+		
+	\node (UI) [level1, below=of AV, fill=green!3, minimum width=6cm, minimum height=1.5cm, text width=6cm] {Интерфейс пользователя};
+5\end{tikzpicture}
+\caption{Модули игры.}
+\end{figure}
+
+\newpage
+Все модули можно разделить на два относительно независимых уровня:
 \begin{itemize}	
 	\item пользовательский;
 	\item системный.
 \end{itemize}
 
-Взаимодействие между уровнями осуществляется посредством передачи тех или иных комманд и/или сигналов. 
+\begin{figure}[thbp!]
+\centering
+\begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
+	%nodes
+	\node (Sys) [level3] {Системный уровень};	
+		\node (Logic) [level2, minimum height=6.5cm, text depth=5cm, xshift=-3.5cm, yshift=-0.5cm] {Логика игры};	
+			\node (Mistakes) [level1, xshift=-3.5cm, yshift=1cm] {Ошибки};
+			\node (Logs) [level1, below of=Mistakes] {Логирование};	
+			\node (Stat) [level1, below of=Logs] {Статистика};
+			\node (Generators) [level1, below of=Stat] {Генераторы};
+			\node (Physics) [level1, below of=Generators] {Физика};		
+		\node (AV) [level2, right=of Logic, yshift=1cm] {Аудио-визуальное сопровождение игры};
+			\node (Sound) [level1,right=of Mistakes, xshift=1.7cm, yshift=-0.5cm] {Звук};
+			\node (Graph) [level1, below of=Sound] {Графика};
+			
+	\node (UI) [level1, below=of Sys, fill=red!3, minimum width=14cm, minimum height=1.5cm, text width=13cm] {Интерфейс пользователя};
+	
+\end{tikzpicture}
+\caption{Уровни игры.}
+\end{figure}
+
+\newpage
+\subsubsection{Взаимодействие компонентов}
+Предположим, что взаимодействие между уровнями и компонентами осуществляется посредством передачи тех или иных комманд и/или сигналов. 
 
 \begin{figure}[thbp!]
 	\centering
-	\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!3, text centered]
 	\begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
 	%nodes
-	\node[abstract, text width = 4cm](usr_level) {Пользовательский уровень};
+	\node (usr_level) [abstract] {Пользовательский уровень};
 
-	\node[abstract, text width = 4cm, below  = of usr_level](sys_level) {Системный уровень};
+	\node (sys_level) [abstract, below  = of usr_level] {Системный уровень};
 	
 	%edges    
-	\path (usr_level.west) edge [bend right = 105] node [left] {Запрос} (sys_level.west);
-	\path (sys_level.west) edge [bend left = 35] node [right] {Ответ} (usr_level.west);
+	\path (usr_level.west) edge [bend right=105] node [left] {Запрос} (sys_level.west);
+	\path (sys_level.west) edge [bend left=35] node [right] {Ответ} (usr_level.west);
 	
-	\path (sys_level.east) edge [bend right = 105] node [right] {Ответ} (usr_level.east);
-	\path (usr_level.east) edge [bend left = 35] node [left] {Запрос} (sys_level.east);
+	\path (sys_level.east) edge [bend right=105] node [right] {Ответ} (usr_level.east);
+	\path (usr_level.east) edge [bend left=35] node [left] {Запрос} (sys_level.east);
 	
 	\end{tikzpicture}
 	\caption{Схема взаимодействия уровней.}
 \end{figure}
 
-Рассмотрим каждый из уровней отдельно.
+Для определения перечня необходимых команд и управляющих сигналов и ответных сообщений, рассмотрим процессы, происходящие во время игры с точки зрения информационных потоков. 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
-\subsection{Пользовательский уровень}
+\subsection{Информационные потоки}
+
+Начнем анализ информационных потоков с рассмотрения обобщенных схем функционирования системы и будем последовательно уточнять схему, следуя принципу <<от общего к частному>>.
+
+Обычно внутренее устройство игры выглядит следующим образом:
+
+\begin{figure}[thbp!]	
+	\centering
+	\begin{tikzpicture}[node distance = 1cm]
+	\node (MAGIC) [rectangle, draw=black, fill=orange!3, text centered, minimum width=5cm, minimum height=2cm] {MAGIC};
+	
+	\end{tikzpicture}
+	\vspace{10pt}
+	\caption{Обычное представление об игре}
+\end{figure}
+
+В простейшем виде игра может быть представлена последовательностью действий пользователя:
+
+\begin{figure}[thbp!]
+	\centering
+	\begin{tikzpicture}[node distance = 1cm]
+	% Nodes
+	\node (launch) [process] {Включить игру};
+	\node (game) [process, below=of launch] {Играть в игру};
+	\node (exit) [process, below=of game] {Выключить игру};
+	
+	% Edges
+	\draw [arrow] (launch) -- (game);
+	\draw [arrow] (game) -- (exit);
+	
+	\end{tikzpicture}
+	\vspace{10pt}
+	\caption{Схема игры с точки зрения пользователя}
+\end{figure}
+
+Уже на этом моменте происходит разделение на три относительно независимые группы процессов:
+\begin{enumerate}
+	\item подготовки игры;
+	\item непосредственно игрового процеса;
+	\item завершения игры.
+\end{enumerate}
+
+При этом можно предположить, что процессы 1 и 3 групп относятся в большей части к системному уровню, а 2 --- к пользовательскому. В дальнейшем обозначим компоненты пользовательского уровня светло-зеленым, а системного --- светло-голубым.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
+\subsubsection{Процессы подготовки игры}
+
+\begin{figure}[thbp!]
+	\begin{tikzpicture}[node distance = 1cm]
+	
+	\end{tikzpicture}
+	\vspace{10pt}
+	\caption{Начальная схема процессов подготовки игры}
+\end{figure}
+
+
+\begin{figure}[thbp!]
+	\begin{tikzpicture}[node distance = 1cm]
+	
+	\end{tikzpicture}
+	\vspace{10pt}
+	\caption{Итоговая схема процессов подготовки игры}
+\end{figure}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
+\subsubsection{Игровой процесс}
+
+\begin{figure}[thbp!]
+	\begin{tikzpicture}[node distance = 1cm]
+	
+	\end{tikzpicture}
+	\vspace{10pt}
+	\caption{Начальная схема игрового процесса}
+\end{figure}
+
+\begin{figure}[thbp!]
+	\begin{tikzpicture}[node distance = 1cm]
+	
+	\end{tikzpicture}
+	\vspace{10pt}
+	\caption{Итоговая схема игрового процесса}
+\end{figure}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
+\subsubsection{Процессы завершения игры}
+\begin{figure}[thbp!]
+	\begin{tikzpicture}[node distance = 1cm]
+	
+	\end{tikzpicture}
+	\vspace{10pt}
+	\caption{Начальная схема процессов завершения игры}
+\end{figure}
+
+\begin{figure}[thbp!]
+	\begin{tikzpicture}[node distance = 1cm]
+	
+	\end{tikzpicture}
+	\vspace{10pt}
+	\caption{Итоговая схема процессов завершения игры}
+\end{figure}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
+\begin{figure}[thbp!]
+	\begin{tikzpicture}[node distance = 2cm]
+	% Nodes
+	\node[startstop](launch) {Старт};
+	\node[process, below of = launch](sys-chk) {Проверка наличия системных компонентов};
+	\node[decision, below of = sys-chk, yshift=-0.5cm](sys-chk-cond) {Проверка пройдена успешно?};
+	\node[process, right of = sys-chk-cond, xshift = 7cm](sys-rep) {Механизм исправления ошибок};
+	\node[process, below of = sys-chk-cond, yshift=-0.5cm](usr-chk) {Проверка наличия пользовательских компонентов};
+	\node[decision, below of = usr-chk, yshift=-0.5cm](usr-chk-cond) {Проверка пройдена успешно?};
+	\node[process, right of = usr-chk-cond, xshift = 7cm](usr-rep) {Механизм исправления ошибок};
+	\node[process, below of = usr-chk-cond, yshift=-0.5cm](game) {Запуск игры};
+	
+	% Edges
+	\draw [arrow] (launch) -- (sys-chk);
+	\draw [arrow] (sys-chk) -- (sys-chk-cond);
+	\draw [arrow] (sys-chk-cond) -- node[anchor=south] {нет} (sys-rep);
+	\draw [arrow] (sys-chk-cond) -- node[anchor=west] {да} (usr-chk);
+	\draw [arrow] (sys-rep) |- (sys-chk);
+	\draw [arrow] (usr-chk) -- (usr-chk-cond);
+	\draw [arrow] (usr-chk-cond) -- node[anchor=south] {нет} (usr-rep);
+	\draw [arrow] (usr-chk-cond) -- node[anchor=west] {да} (game);		
+	\draw [arrow] (usr-rep) |- (usr-chk);
+	
+	\end{tikzpicture}
+	\vspace{10pt}
+	\caption{Группа процессов начала}
+\end{figure}
+
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
+\subsection{Уровни}
+\subsubsection{Системный уровень}
+
+\paragraph{Функции уровня:}
+\begin{itemize}
+	\item ;
+	\item .\\
+\end{itemize}
+
+\paragraph{Компоненты уровня:}
+\begin{itemize}
+	\item ;
+	\item .\\
+\end{itemize}
+
+\paragraph{Схема уровня:}
+
+\begin{figure}[thbp!]
+	\centering
+	
+	\caption{Схема системного уровня.}
+\end{figure}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\newpage
+\subsubsection{Пользовательский уровень}
 
 \paragraph{Функции уровня:}
 \begin{itemize}
@@ -449,28 +689,27 @@
 Таким образом, пользовательский уровень является <<управляющим воздействием>> \footnote{В терминологии дисциплины <<Управление проектами>> Григорьева В.К.} для cистемного уровня.\\
 
 \paragraph{Схема уровня:}
+\begin{figure}[thbp!]
+	\centering
+	
+	\caption{Схема пользовательского уровня.}
+\end{figure}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
-\subsection{Системный уровень}
-
-\paragraph{Функции уровня:}
-\begin{itemize}
-	\item ;
-	\item .\\
-\end{itemize}
-
-\paragraph{Компоненты уровня:}
-\begin{itemize}
-	\item ;
-	\item .\\
-\end{itemize}
-
-\paragraph{Схема уровня:}
+\subsubsection{Совмещенная схема}
+\begin{figure}[thbp!]
+	\centering
+	
+	\caption{Совмещенная схема модулей.}
+\end{figure}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
-\subsection{Совмещенная схема}
+\subsection{Список вопросов}
+\begin{itemize}
+	\item
+\end{itemize}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
@@ -567,6 +806,7 @@
 \caption{Хронология проекта.}
 \end{table}
 
+\newpage
 \subsection{Список инструментов}
 \begin{table}[h]
 	\begin{tabularx}{\textwidth}{|l|X|}
@@ -591,70 +831,6 @@
 	\caption{Список инструментов.}
 \end{table}
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-\newpage
-
-\section{Старая часть}
-
-\subsection{Информационные потоки}
-\begin{figure}[thbp!]
-	\begin{tikzpicture}[node distance = 2cm]
-	% Nodes
-	\node (launch) [startstop] {Старт};
-	\node (sys-chk) [process, below of=launch] {Системные проверки};
-	\node (game-exist) [decision, below of=sys-chk, yshift=-0.5cm] {Старая игра существует?};
-	\node (game-gen) [process, right of=game-exist, xshift=7cm] {Сгенерировать новую};
-	\node (game-load) [process, below of=game-exist, yshift=-0.5cm] {Загрузить игру};
-	\node (game-launch) [process, below of=game-load] {Запустить игру};
-	\node (game-play) [process, below of=game-launch] {Играть в игру};
-
-%	\node (exit) [startstop, below of=game] {выходной сигнал};
-	
-	% Edges
-	\draw [arrow] (launch) -- (sys-chk);
-	\draw [arrow] (sys-chk) -- (game-exist);
-	\draw [arrow] (game-exist) -- node[anchor=south] {нет} (game-gen);
-	\draw [arrow] (game-exist) -- node[anchor=west] {да} (game-load);
-	\draw [arrow] (game-gen) |- (game-load);
-	\draw [arrow] (game-load) -- (game-launch);
-	\draw [arrow] (game-launch) -- (game-play);
-
-	
-	\end{tikzpicture}
-	\vspace{10pt}
-	\caption{Общая схема игры (упрощенная)}
-\end{figure}
-
-
-
-\subsection{Процессы начала}
-\begin{figure}[thbp!]
-	\begin{tikzpicture}[node distance = 2cm]
-		% Nodes
-		\node[startstop](launch) {Старт};
-		\node[process, below of = launch](sys-chk) {Проверка наличия системных компонентов};
-		\node[decision, below of = sys-chk, yshift=-0.5cm](sys-chk-cond) {Проверка пройдена успешно?};
-		\node[process, right of = sys-chk-cond, xshift = 7cm](sys-rep) {Механизм исправления ошибок};
-		\node[process, below of = sys-chk-cond, yshift=-0.5cm](usr-chk) {Проверка наличия пользовательских компонентов};
-		\node[decision, below of = usr-chk, yshift=-0.5cm](usr-chk-cond) {Проверка пройдена успешно?};
-		\node[process, right of = usr-chk-cond, xshift = 7cm](usr-rep) {Механизм исправления ошибок};
-		\node[process, below of = usr-chk-cond, yshift=-0.5cm](game) {Запуск игры};
-		
-		% Edges
-		\draw [arrow] (launch) -- (sys-chk);
-		\draw [arrow] (sys-chk) -- (sys-chk-cond);
-		\draw [arrow] (sys-chk-cond) -- node[anchor=south] {нет} (sys-rep);
-		\draw [arrow] (sys-chk-cond) -- node[anchor=west] {да} (usr-chk);
-		\draw [arrow] (sys-rep) |- (sys-chk);
-		\draw [arrow] (usr-chk) -- (usr-chk-cond);
-		\draw [arrow] (usr-chk-cond) -- node[anchor=south] {нет} (usr-rep);
-		\draw [arrow] (usr-chk-cond) -- node[anchor=west] {да} (game);		
-		\draw [arrow] (usr-rep) |- (usr-chk);
-		
-	\end{tikzpicture}
-	\vspace{10pt}
-	\caption{Группа процессов начала}
-\end{figure}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \end{document}
