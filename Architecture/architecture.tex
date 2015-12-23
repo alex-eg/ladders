@@ -20,7 +20,7 @@
 \tikzstyle{level3}=[rectangle, draw=black, rounded corners, fill=red!3, minimum height=8cm, minimum width=14cm, text centered, text width=13cm, text depth=7cm]
 
 %definig new tikz primitives for workflows
-\tikzstyle{startstop} = [ellipse, minimum width=3cm, minimum height=1cm, text centered, text width=3.5cm, draw=black]
+\tikzstyle{startstop} = [ellipse, minimum width=5cm, minimum height=1cm, text centered, text width=4cm, draw=black]
 
 \tikzstyle{io} = [trapezium, trapezium left angle=60, trapezium right angle=120, minimum width=3cm, minimum height=1cm, text centered, text width=3.5cm, draw=black]
 
@@ -546,7 +546,16 @@
 \subsubsection{Процессы подготовки игры}
 
 \begin{figure}[thbp!]
+	\centering
 	\begin{tikzpicture}[node distance = 1cm]
+	%nodes
+	\node (init) [startstop] {Входной сигнал};
+	\node (work) [process, below=of init] {Подготовка игры};
+	\node (exit) [startstop, below=of work] {Подготовленная игра};
+	
+	%edges
+	\draw [arrow] (init) -- (work);
+	\draw [arrow] (work) -- (exit);
 	
 	\end{tikzpicture}
 	\vspace{10pt}
@@ -555,7 +564,11 @@
 
 
 \begin{figure}[thbp!]
+	\centering
 	\begin{tikzpicture}[node distance = 1cm]
+	%nodes
+	
+	%edges
 	
 	\end{tikzpicture}
 	\vspace{10pt}
@@ -568,7 +581,16 @@
 \subsubsection{Игровой процесс}
 
 \begin{figure}[thbp!]
+	\centering
 	\begin{tikzpicture}[node distance = 1cm]
+	%nodes
+	\node (init) [startstop] {Подготовленная игра};
+	\node (work) [process, below=of init] {Игровой процесс};
+	\node (exit) [startstop, below=of work] {Инициация выключения};
+	
+	%edges
+	\draw [arrow] (init) -- (work);
+	\draw [arrow] (work) -- (exit);
 	
 	\end{tikzpicture}
 	\vspace{10pt}
@@ -576,7 +598,11 @@
 \end{figure}
 
 \begin{figure}[thbp!]
+	\centering
 	\begin{tikzpicture}[node distance = 1cm]
+	%nodes
+	
+	%edges
 	
 	\end{tikzpicture}
 	\vspace{10pt}
@@ -587,7 +613,16 @@
 \newpage
 \subsubsection{Процессы завершения игры}
 \begin{figure}[thbp!]
+	\centering
 	\begin{tikzpicture}[node distance = 1cm]
+	%nodes
+	\node (init) [startstop] {Инициация выключения};
+	\node (work) [process, below=of init] {Завершение игры};
+	\node (exit) [startstop, below=of work] {Выходной сигнал};
+	
+	%edges
+	\draw [arrow] (init) -- (work);
+	\draw [arrow] (work) -- (exit);
 	
 	\end{tikzpicture}
 	\vspace{10pt}
@@ -595,7 +630,11 @@
 \end{figure}
 
 \begin{figure}[thbp!]
+	\centering
 	\begin{tikzpicture}[node distance = 1cm]
+	%nodes
+	
+	%edges
 	
 	\end{tikzpicture}
 	\vspace{10pt}
@@ -605,6 +644,7 @@
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
 \begin{figure}[thbp!]
+	\centering
 	\begin{tikzpicture}[node distance = 2cm]
 	% Nodes
 	\node[startstop](launch) {Старт};
@@ -798,7 +838,7 @@
 	\hline
 	4 & 2015-11-12 &  & Разработка архитектуры проекта\\
 	\hline
-	5 &  &  &  \\
+	5 &  & 2015-12-22 & Завершение сотрудничества \\
 	\hline
 	&  &  &  \\
 	\hline
