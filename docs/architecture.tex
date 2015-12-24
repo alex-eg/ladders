@@ -34,17 +34,17 @@
 \begin{document}
 
 \begin{titlepage}
-	
+
 	\begin{center}
 		\Huge{Лестницы}
 	\end{center}
 
 	\vspace{40pt}
-	
+
 	\begin{center}
 		\LARGE{Архитектура приложения}
 	\end{center}
-	
+
 \end{titlepage}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -64,7 +64,7 @@
 
 \paragraph{Геймплей:} нединамичный платформер.
 
-\paragraph{Цель игры:} выбраться наружу, набрав как можно больше очков. 
+\paragraph{Цель игры:} выбраться наружу, набрав как можно больше очков.
 
 \paragraph{Очки} начисляются за:
 \begin{itemize}
@@ -100,7 +100,7 @@
 		\item перегородки;
 		\item двери.
 	\end{itemize}
-	\item переход из комнаты возможнен с помощью:
+	\item переход из комнаты возможен с помощью:
 	\begin{itemize}
 		\item двери в стене комнаты (левая/правая);
 		\item прохода сквозь пол/потолок.
@@ -127,7 +127,7 @@
 		\item прыжок:
 		\begin{itemize}
 			\item высота --- не более вертикального сегмента;
-			\item длина --- не более горзионтального сегмента.
+			\item длина --- не более горизонтального сегмента.
 		\end{itemize}
 		\item падение:
 		\begin{itemize}
@@ -139,7 +139,7 @@
 	\end{itemize}
 \end{itemize}
 
-\paragraph{Карта:} 
+\paragraph{Карта:}
 \begin{itemize}
 	\item находится в правом верхнем углу (в свёрнутом состоянии);
 	\item показывает посещенные, текущую и стартовую комнаты;
@@ -147,7 +147,7 @@
 	\item переходы показываются, если существуют.
 \end{itemize}
 
-\paragraph{Завершение игры} происхоит в случае:
+\paragraph{Завершение игры} происходит в случае:
 \begin{itemize}
 	\item утраты всех жизней;
 	\item по прохождении последнего уровня.
@@ -173,7 +173,7 @@
 	\hline
 	Меню & Escape & Start \\
 	\hline
-	Забраться на лестинцу & W & Крестовина Вверх \\
+	Забраться на лестницу & W & Крестовина Вверх \\
 	\hline
 	Открыть дверь & E & X \\
 	\hline
@@ -196,13 +196,13 @@
 		\item продолжить --- присутствует, если в прошлом запуске была незаконченная сессия. Иначе отсутствует
 		\item старт --- начало игры
 		\item рекорды --- таблица рекордов с очками и именами победителей
-		\item упрaвление --- меню настроек управления
+		\item управление --- меню настроек управления
 		\item выход -- выход из приложения\\
 	\end{itemize}
-	\item игра:	
+	\item игра:
 	\begin{itemize}
 		\item основное окно --- текущий уровень;
-		\item левый верхний угол --- таймер и счётчик жизней. 
+		\item левый верхний угол --- таймер и счётчик жизней.
 		\item правый верхний угол --- количество очков и полупрозрачный оверлей с мини-картой.
 	\end{itemize}
 \end{itemize}
@@ -256,7 +256,7 @@
 	\end{itemize}
 \end{itemize}
 
-\paragraph{Логгирование:}
+\paragraph{Логирование:}
 \begin{itemize}
 	\item четыре уровня:
 	\begin{itemize}
@@ -273,7 +273,7 @@
 \begin{itemize}
 	\item Отсутствие файла настроек/ошибка при его чтении:
 	\begin{enumerate}
-		\item вывести в лог информационное сообщение (в случае ошибки при чтении --- редупреждение) об отсутствии файла и том, что он будет создан и заполнен значениями по умолчанию
+		\item вывести в лог информационное сообщение (в случае ошибки при чтении --- предупреждение) об отсутствии файла и том, что он будет создан и заполнен значениями по умолчанию
 		\item создать файл и заполнить значениями по умолчанию
 	\end{enumerate}
 	\item Отсутствие файла высоких очков:
@@ -290,7 +290,7 @@
 	\item Отсутствие файла музыки или звука:
 	\begin{enumerate}
 		\item вывести в лог предупреждение об отсутствующем файле.
-		\item в ситуации, когда звук должнен быть воспроизведён, не воспроизводить звук, и не генерировать ошибок.
+		\item в ситуации, когда звук должен быть воспроизведён, не воспроизводить звук, и не генерировать ошибок.
 	\end{enumerate}
 	\item Отсутствие файла изображения любого из игровых объектов, или файла шрифта:
 	\begin{enumerate}
@@ -301,7 +301,7 @@
 
 \subsection{Список вопросов}
 \begin{itemize}
-	\item что происходит с персонажем поистичение таймера, если уровень не закончен;
+	\item что происходит с персонажем по истечении таймера, если уровень не закончен;
 	\item начисляются ли очки за оставшиеся "базовые жизни";
 	\item конечно ли (каково) число возможных дополнительных жизней;
 	\item каков механизм генерации жизней и монеток:
@@ -317,7 +317,7 @@
 			\item что и при каких условиях записывается.
 		\end{itemize}
 	\end{itemize}
-	\item 
+	\item
 \end{itemize}
 
 
@@ -327,14 +327,14 @@
 
 \subsection{Компоненты игры}
 На основании проведенного анализа технического задания, можно заключить, что приложение состоит из ряда компонентов, отвечающих за:
-\begin{itemize}	
-	\item ведение статистики;	
-	\item логирование;	
-	\item отслеживание ошибок;	
-	\item связь с пользователем;	
-	\item генерацию объектов окружения;	
-	\item аудио-визуальное сопровождение игрового процесса;
-	\item выполнение необходимых расчетов в соответствии с <<моделью мира>> \footnote{<<Mодель мира>> --- физические и логические законы игровой реальности.}.\\
+\begin{itemize}
+	\item ведение статистики;
+	\item логирование;
+	\item отслеживание ошибок;
+	\item связь с пользователем;
+	\item генерацию объектов окружения;
+	\item аудиовизуальное сопровождение игрового процесса;
+	\item выполнение необходимых расчетов в соответствии с <<моделью мира>> \footnote{<<Модель мира>> --- физические и логические законы игровой реальности.}.\\
 \end{itemize}
 
 Таким образом, можно выделить следующие системные компоненты и функции, ими выполняемые:
@@ -362,14 +362,14 @@
 	\item логирование:
 	\begin{itemize}
 		\item составление файла логов определенного формата.\\
-	\end{itemize}	
+	\end{itemize}
 	\item ошибки:
 	\begin{itemize}
 		\item отслеживание наличия необходимых компонентов;
 		\item решение проблем их отсутствия;
 		\item информирование пользователя о внештатных ситуациях и конфликтах.
 	\end{itemize}
-	\item генераторы:	
+	\item генераторы:
 	\begin{itemize}
 		\item составление уровней;
 		\item заполнение комнат.
@@ -386,13 +386,13 @@
 \begin{tikzpicture}[node distance=0.5cm, auto, ->, >=stealth']
 	%nodes
 	\node (Sound) [level1] {Звук};
-	\node (Graph) [level1, right=of Sound] {Графика};	
+	\node (Graph) [level1, right=of Sound] {Графика};
 	\node (UI) [level1, right=of Graph] {Интерфейс пользователя};
-	
+
 	\node (Stat) [level1, below=of Sound] {Статистика};
 	\node (Mistakes) [level1, right=of Stat] {Ошибки};
 	\node (Logs) [level1, right=of Mistakes] {Логирование};
-	
+
 	\node (Physics) [level1, below=of Stat] {Физика};
 	\node (Generators) [level1, right=of Physics] {Генераторы};
 
@@ -403,22 +403,22 @@
 В свою очередь, компоненты могут быть сгруппированы в более крупные логические элементы --- модули:
 
 \begin{itemize}
-	\item Логика игры:	
+	\item Логика игры:
 	\begin{itemize}
 		\item технические компоненты:
 		\begin{itemize}
 			\item ошибки;
 			\item логирование;
 		\end{itemize}
-		\item статистика;	
+		\item статистика;
 		\item генераторы;
 		\item физика.
 	\end{itemize}
-	\item Аудио-визуальное сопроводжение игры:
+	\item Аудиовизуальное сопровождение игры:
 	\begin{itemize}
 		\item звук;
 		\item графика.
-	\end{itemize}	
+	\end{itemize}
 	\item Интерфейс пользователя.
 \end{itemize}
 
@@ -426,17 +426,17 @@
 \centering
 \begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
 	%nodes
-	\node (Logic) [level2, minimum height=7cm, text depth=6cm] {Логика игры};	
+	\node (Logic) [level2, minimum height=7cm, text depth=6cm] {Логика игры};
 		\node (Mistakes) [level1, yshift=1.5cm] {Ошибки};
-		\node (Logs) [level1, below of=Mistakes] {Логирование};	
+		\node (Logs) [level1, below of=Mistakes] {Логирование};
 		\node (Stat) [level1, below of=Logs] {Статистика};
 		\node (Generators) [level1, below of=Stat] {Генераторы};
-		\node (Physics) [level1, below of=Generators] {Физика};	
+		\node (Physics) [level1, below of=Generators] {Физика};
 
-	\node (AV) [level2, right=of Logic, yshift=1.5cm] {Аудио-визуальное сопровождение игры};
+	\node (AV) [level2, right=of Logic, yshift=1.5cm] {Аудиовизуальное сопровождение игры};
 		\node (Sound) [level1,right=of Mistakes, xshift=1.5cm] {Звук};
 		\node (Graph) [level1, below of=Sound] {Графика};
-		
+
 	\node (UI) [level1, below=of AV, fill=green!3, minimum width=6cm, minimum height=1.5cm, text width=6cm] {Интерфейс пользователя};
 5\end{tikzpicture}
 \caption{Модули игры.}
@@ -444,7 +444,7 @@
 
 \newpage
 Все модули можно разделить на два относительно независимых уровня:
-\begin{itemize}	
+\begin{itemize}
 	\item пользовательский;
 	\item системный.
 \end{itemize}
@@ -453,26 +453,26 @@
 \centering
 \begin{tikzpicture}[node distance=1cm, auto, ->, >=stealth']
 	%nodes
-	\node (Sys) [level3] {Системный уровень};	
-		\node (Logic) [level2, minimum height=6.5cm, text depth=5cm, xshift=-3.5cm, yshift=-0.5cm] {Логика игры};	
+	\node (Sys) [level3] {Системный уровень};
+		\node (Logic) [level2, minimum height=6.5cm, text depth=5cm, xshift=-3.5cm, yshift=-0.5cm] {Логика игры};
 			\node (Mistakes) [level1, xshift=-3.5cm, yshift=1cm] {Ошибки};
-			\node (Logs) [level1, below of=Mistakes] {Логирование};	
+			\node (Logs) [level1, below of=Mistakes] {Логирование};
 			\node (Stat) [level1, below of=Logs] {Статистика};
 			\node (Generators) [level1, below of=Stat] {Генераторы};
-			\node (Physics) [level1, below of=Generators] {Физика};		
-		\node (AV) [level2, right=of Logic, yshift=1cm] {Аудио-визуальное сопровождение игры};
+			\node (Physics) [level1, below of=Generators] {Физика};
+		\node (AV) [level2, right=of Logic, yshift=1cm] {Аудиовизуальное сопровождение игры};
 			\node (Sound) [level1,right=of Mistakes, xshift=1.7cm, yshift=-0.5cm] {Звук};
 			\node (Graph) [level1, below of=Sound] {Графика};
-			
+
 	\node (UI) [level1, below=of Sys, fill=red!3, minimum width=14cm, minimum height=1.5cm, text width=13cm] {Интерфейс пользователя};
-	
+
 \end{tikzpicture}
 \caption{Уровни игры.}
 \end{figure}
 
 \newpage
 \subsubsection{Взаимодействие компонентов}
-Предположим, что взаимодействие между уровнями и компонентами осуществляется посредством передачи тех или иных комманд и/или сигналов. 
+Предположим, что взаимодействие между уровнями и компонентами осуществляется посредством передачи тех или иных команд и/или сигналов.
 
 \begin{figure}[thbp!]
 	\centering
@@ -481,19 +481,19 @@
 	\node (usr_level) [abstract] {Пользовательский уровень};
 
 	\node (sys_level) [abstract, below  = of usr_level] {Системный уровень};
-	
-	%edges    
+
+	%edges
 	\path (usr_level.west) edge [bend right=105] node [left] {Запрос} (sys_level.west);
 	\path (sys_level.west) edge [bend left=35] node [right] {Ответ} (usr_level.west);
-	
+
 	\path (sys_level.east) edge [bend right=105] node [right] {Ответ} (usr_level.east);
 	\path (usr_level.east) edge [bend left=35] node [left] {Запрос} (sys_level.east);
-	
+
 	\end{tikzpicture}
 	\caption{Схема взаимодействия уровней.}
 \end{figure}
 
-Для определения перечня необходимых команд и управляющих сигналов и ответных сообщений, рассмотрим процессы, происходящие во время игры с точки зрения информационных потоков. 
+Для определения перечня необходимых команд и управляющих сигналов и ответных сообщений, рассмотрим процессы, происходящие во время игры с точки зрения информационных потоков.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \newpage
@@ -501,13 +501,13 @@
 
 Начнем анализ информационных потоков с рассмотрения обобщенных схем функционирования системы и будем последовательно уточнять схему, следуя принципу <<от общего к частному>>.
 
-Обычно внутренее устройство игры выглядит следующим образом:
+Обычно внутреннее устройство игры выглядит следующим образом:
 
-\begin{figure}[thbp!]	
+\begin{figure}[thbp!]
 	\centering
 	\begin{tikzpicture}[node distance = 1cm]
 	\node (MAGIC) [rectangle, draw=black, fill=orange!3, text centered, minimum width=5cm, minimum height=2cm] {MAGIC};
-	
+
 	\end{tikzpicture}
 	\vspace{10pt}
 	\caption{Обычное представление об игре}
@@ -522,11 +522,11 @@
 	\node (launch) [process] {Включить игру};
 	\node (game) [process, below=of launch] {Играть в игру};
 	\node (exit) [process, below=of game] {Выключить игру};
-	
+
 	% Edges
 	\draw [arrow] (launch) -- (game);
 	\draw [arrow] (game) -- (exit);
-	
+
 	\end{tikzpicture}
 	\vspace{10pt}
 	\caption{Схема игры с точки зрения пользователя}
@@ -535,7 +535,7 @@
 Уже на этом моменте происходит разделение на три относительно независимые группы процессов:
 \begin{enumerate}
 	\item подготовки игры;
-	\item непосредственно игрового процеса;
+	\item непосредственно игрового процесса;
 	\item завершения игры.
 \end{enumerate}
 
@@ -552,11 +552,11 @@
 	\node (init) [startstop] {Входной сигнал};
 	\node (work) [process, below=of init] {Подготовка игры};
 	\node (exit) [startstop, below=of work] {Подготовленная игра};
-	
+
 	%edges
 	\draw [arrow] (init) -- (work);
 	\draw [arrow] (work) -- (exit);
-	
+
 	\end{tikzpicture}
 	\vspace{10pt}
 	\caption{Начальная схема процессов подготовки игры}
@@ -567,9 +567,9 @@
 	\centering
 	\begin{tikzpicture}[node distance = 1cm]
 	%nodes
-	
+
 	%edges
-	
+
 	\end{tikzpicture}
 	\vspace{10pt}
 	\caption{Итоговая схема процессов подготовки игры}
@@ -587,11 +587,11 @@
 	\node (init) [startstop] {Подготовленная игра};
 	\node (work) [process, below=of init] {Игровой процесс};
 	\node (exit) [startstop, below=of work] {Инициация выключения};
-	
+
 	%edges
 	\draw [arrow] (init) -- (work);
 	\draw [arrow] (work) -- (exit);
-	
+
 	\end{tikzpicture}
 	\vspace{10pt}
 	\caption{Начальная схема игрового процесса}
@@ -601,9 +601,9 @@
 	\centering
 	\begin{tikzpicture}[node distance = 1cm]
 	%nodes
-	
+
 	%edges
-	
+
 	\end{tikzpicture}
 	\vspace{10pt}
 	\caption{Итоговая схема игрового процесса}
@@ -619,11 +619,11 @@
 	\node (init) [startstop] {Инициация выключения};
 	\node (work) [process, below=of init] {Завершение игры};
 	\node (exit) [startstop, below=of work] {Выходной сигнал};
-	
+
 	%edges
 	\draw [arrow] (init) -- (work);
 	\draw [arrow] (work) -- (exit);
-	
+
 	\end{tikzpicture}
 	\vspace{10pt}
 	\caption{Начальная схема процессов завершения игры}
@@ -633,9 +633,9 @@
 	\centering
 	\begin{tikzpicture}[node distance = 1cm]
 	%nodes
-	
+
 	%edges
-	
+
 	\end{tikzpicture}
 	\vspace{10pt}
 	\caption{Итоговая схема процессов завершения игры}
@@ -655,7 +655,7 @@
 	\node[decision, below of = usr-chk, yshift=-0.5cm](usr-chk-cond) {Проверка пройдена успешно?};
 	\node[process, right of = usr-chk-cond, xshift = 7cm](usr-rep) {Механизм исправления ошибок};
 	\node[process, below of = usr-chk-cond, yshift=-0.5cm](game) {Запуск игры};
-	
+
 	% Edges
 	\draw [arrow] (launch) -- (sys-chk);
 	\draw [arrow] (sys-chk) -- (sys-chk-cond);
@@ -664,9 +664,9 @@
 	\draw [arrow] (sys-rep) |- (sys-chk);
 	\draw [arrow] (usr-chk) -- (usr-chk-cond);
 	\draw [arrow] (usr-chk-cond) -- node[anchor=south] {нет} (usr-rep);
-	\draw [arrow] (usr-chk-cond) -- node[anchor=west] {да} (game);		
+	\draw [arrow] (usr-chk-cond) -- node[anchor=west] {да} (game);
 	\draw [arrow] (usr-rep) |- (usr-chk);
-	
+
 	\end{tikzpicture}
 	\vspace{10pt}
 	\caption{Группа процессов начала}
@@ -695,7 +695,7 @@
 
 \begin{figure}[thbp!]
 	\centering
-	
+
 	\caption{Схема системного уровня.}
 \end{figure}
 
@@ -726,12 +726,12 @@
 	\item .\\
 \end{itemize}
 
-Таким образом, пользовательский уровень является <<управляющим воздействием>> \footnote{В терминологии дисциплины <<Управление проектами>> Григорьева В.К.} для cистемного уровня.\\
+Таким образом, пользовательский уровень является <<управляющим воздействием>> \footnote{В терминологии дисциплины <<Управление проектами>> Григорьева В.К.} для системного уровня.\\
 
 \paragraph{Схема уровня:}
 \begin{figure}[thbp!]
 	\centering
-	
+
 	\caption{Схема пользовательского уровня.}
 \end{figure}
 
@@ -740,7 +740,7 @@
 \subsubsection{Совмещенная схема}
 \begin{figure}[thbp!]
 	\centering
-	
+
 	\caption{Совмещенная схема модулей.}
 \end{figure}
 
@@ -863,7 +863,7 @@
 		\hline
 		Git (via GitHub) & Система контроля версий, осуществление совместной территориально-распрелененной разработки \\
 		\hline
-		Gimp & Подготовка избражений и прочего графического материала \\
+		Gimp & Подготовка изображений и прочего графического материала \\
 		\hline
 		& \\
 		\hline
